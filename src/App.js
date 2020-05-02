@@ -1,26 +1,17 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import LandingPage from './LandingPage';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
 
-export default App;
+export default App =>(
+  <BrowserRouter>
+    <Switch>
+      <Route exact path={["/"]} render={props => <LandingPage {...props} refreshRoute={"/"} /> } />
+      <Route exact path={["/stocks"]} render={props => <LandingPage {...props} refreshRoute={"/stocks"} /> } />
+      <Route exact path={["/real-estate"]} render={props => <LandingPage {...props} refreshRoute={"/real-estate"} /> } />
+      <Route exact path={["/loans"]} render={props => <LandingPage {...props} refreshRoute={"/loans"} /> } />
+      <Route exact path={["/mortgage-calculator"]} render={props => <LandingPage {...props} refreshRoute={"/mortgage-calculator"} /> } />
+      <Route exact path={["/cashflow-calculator"]} render={props => <LandingPage {...props} refreshRoute={"/cashflow-calculator"} /> } />
+    </Switch>
+  </BrowserRouter>
+);
