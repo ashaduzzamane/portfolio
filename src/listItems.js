@@ -23,14 +23,6 @@ export const mainListItems = (
         <ListItemText primary="Dashboard" />
       </ListItem>
     </Link>
-    <Link to='/stocks' className='NavLink'>
-      <ListItem button>
-        <ListItemIcon>
-          <ShowChartIcon id="Icon" />
-        </ListItemIcon>
-        <ListItemText primary="Stocks" />
-      </ListItem>
-    </Link>
     <Link to='/real-estate' className='NavLink'>
       <ListItem button>
         <ListItemIcon>
@@ -67,6 +59,14 @@ export const secondaryListItems = (
             <AttachMoneyIcon id="Icon" />
         </ListItemIcon>
         <ListItemText primary="Cashflow Calculator" />
+      </ListItem>
+    </Link>
+    <Link to='/stocks' className='NavLink'>
+      <ListItem button>
+        <ListItemIcon>
+          <ShowChartIcon id="Icon" />
+        </ListItemIcon>
+        <ListItemText primary="Stocks" />
       </ListItem>
     </Link>
   </div>

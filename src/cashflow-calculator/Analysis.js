@@ -14,14 +14,11 @@ class Analysis extends Component {
     }
   }
 
-  componentWillUpdate() {
-  }
-
   handleClick = event => {
     var totalInvestment = this.props.CashflowCalculatorData.totalInvestment
     var totalExpenses = this.props.CashflowCalculatorData.totalExpenses
     var totalRevenueCashOnCash = this.props.CashflowCalculatorData.totalRevenueCashOnCash
-    var totalRevenueInternalRate = this.props.CashflowCalculatorData.totalRevenueInternalRate
+    var totalRevenueInternalRate = this.props.CashflowCalculatorData.totalRevenueInternalRatenpm
     var cashflow = 0
     var cashOnCashReturn = 0
     var internalRateOfReturn = 0
