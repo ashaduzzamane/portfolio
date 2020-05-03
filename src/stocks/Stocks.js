@@ -43,10 +43,10 @@ export default function Stocks() {
         <Container maxWidth="lg" className={classes.container}>
         <Grid container spacing={3}>
 
-            <Grid item xs={12} md={12} lg={10}>
-            <Paper className={fixedHeightPaperTop}>
-                <StockQuery />
-            </Paper>
+            <Grid item xs={12} md={12} lg={12}>
+                {/* <Paper className={fixedHeightPaperTop}> */}
+                    <StockQuery />
+                {/* </Paper> */}
             </Grid>
 
             {/* <Grid item xs={12} md={12} lg={10}>
