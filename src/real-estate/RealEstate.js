@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
+import RealEstateContent from './RealEstateContent';
 
 const useStyles = makeStyles(theme => ({
     content: {
@@ -23,7 +24,7 @@ const useStyles = makeStyles(theme => ({
         flexDirection: 'column',
     },
     fixedHeight: {
-        height: 240,
+        height: 560,
     },
 }))
 
@@ -35,29 +36,11 @@ export default function RealEstate() {
         <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
-        <Grid container spacing={3}>
-            
-            <Grid item xs={12} md={8} lg={9}>
-            <Paper className={fixedHeightPaper}>
-                
-            </Paper>
+            <Grid container spacing={3}>
+                <Grid item xs={12} md={12} lg={12}>
+                    <RealEstateContent />
+                </Grid>
             </Grid>
-            
-            <Grid item xs={12} md={4} lg={3}>
-            <Paper className={fixedHeightPaper}>
-                
-            </Paper>
-            </Grid>
-            
-            <Grid item xs={12}>
-            <Paper className={classes.paper}>
-                
-            </Paper>
-            </Grid>
-        </Grid>
-        {/* <Box pt={4}>
-            <Copyright />
-        </Box> */}
         </Container>
     </main>
     )

@@ -3,6 +3,7 @@ import { Card, CardContent, Grid, Typography, Avatar } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import { connect } from 'react-redux';
+import trade from 'wstrade-api';
 
 class Analysis extends Component {
   constructor(props) {
@@ -13,6 +14,12 @@ class Analysis extends Component {
       internalRateOfReturn: 0,
     }
   }
+
+  // componentWillMount() {
+  //   var email = 
+  //   var password = 
+  //   trade.login(email, password).then(token => { console.log(token) })
+  // }
 
   handleClick = event => {
     var totalInvestment = this.props.CashflowCalculatorData.totalInvestment
