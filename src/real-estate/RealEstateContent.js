@@ -13,18 +13,18 @@ class RealEstateContent extends Component {
         super(props);
         this.state = {
             showPopup: false,
-            nextIndex: 2,
+            nextIndex: 1,
             propertiesData: [
-                {
-                    id: 1,
-                    type: 'Duplex',
-                    address: '7911 Rue Baribeau, LaSalle, QC',
-                    price: '500000',
-                    investment: '45000',
-                    cashflow: '400',
-                    cashOnCash: '10.4',
-                    internalRate: '39.8'
-                }
+                // {
+                //     id: 1,
+                //     type: 'Duplex',
+                //     address: '7911 Rue Baribeau, LaSalle, QC',
+                //     price: '500000',
+                //     investment: '45000',
+                //     cashflow: '400',
+                //     cashOnCash: '10.4',
+                //     internalRate: '39.8'
+                // }
             ]
         }
     }
@@ -56,6 +56,23 @@ class RealEstateContent extends Component {
             this.setState({ nextIndex : (index + 1) })
         }
         this.togglePopup()
+    }
+
+    handleDelete = (e, itemID) => {
+        var propertiesData = this.state.propertiesData
+        var nextIndex = propertiesData.length
+        this.setState({ nextIndex : nextIndex })
+        propertiesData.forEach(property => {
+            if(itemID == property.id) {
+                propertiesData.splice(( property.id - 1) , 1)
+            }
+        })
+        var newIndex = 1
+        propertiesData.forEach(property => {
+            property.id = newIndex
+            newIndex++
+        })
+        this.setState({ propertiesData : propertiesData })
     }
 
     render() {
@@ -154,10 +171,11 @@ class RealEstateContent extends Component {
                                     EDIT
                                 </Typography>
                             </Button>
-                            <Button variant="outlined" style={buttonStyleDelete}>
+                            <Button id={property.id} variant="outlined" style={buttonStyleDelete}>
                                 <Typography
                                     color="inherit"
                                     variant="h6"
+                                    onClick={((e) => this.handleDelete(e, property.id))}
                                 >
                                     DELETE
                                 </Typography>
