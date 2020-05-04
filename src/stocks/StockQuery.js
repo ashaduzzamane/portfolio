@@ -11,7 +11,7 @@ class StockQuery extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            prevOpen: 0,
+            prevClose: 0,
             hundredDayHigh: 0,
             hundredDayLow: 0,
             pastSeven: '+0.00',
@@ -102,11 +102,11 @@ class StockQuery extends Component {
             var hundredDayLow = 100000000
             for (var key in response.data['Time Series (Daily)']) {
                 date.unshift(key)
-                marketValue.unshift(response.data['Time Series (Daily)'][key]['1. open'])
-                if(parseFloat(response.data['Time Series (Daily)'][key]['1. open']) > hundredDayHigh ) {
-                    hundredDayHigh = parseFloat(response.data['Time Series (Daily)'][key]['1. open'])
-                } else if(parseFloat(response.data['Time Series (Daily)'][key]['1. open']) < hundredDayLow) {
-                    hundredDayLow = parseFloat(response.data['Time Series (Daily)'][key]['1. open'])
+                marketValue.unshift(response.data['Time Series (Daily)'][key]['4. close'])
+                if(parseFloat(response.data['Time Series (Daily)'][key]['4. close']) > hundredDayHigh ) {
+                    hundredDayHigh = parseFloat(response.data['Time Series (Daily)'][key]['4. close'])
+                } else if(parseFloat(response.data['Time Series (Daily)'][key]['4. close']) < hundredDayLow) {
+                    hundredDayLow = parseFloat(response.data['Time Series (Daily)'][key]['4. close'])
                 }
             }
             var pastSeven = 0
@@ -136,7 +136,7 @@ class StockQuery extends Component {
                 pastHundred = (marketValue[0] / marketValue[marketValue.length - 1]).toFixed(2)
                 pastHundredStr = '-' + pastHundred
             }
-            this.setState({ prevOpen : parseFloat(marketValue[marketValue.length - 1]).toFixed(2) })
+            this.setState({ prevClose : parseFloat(marketValue[marketValue.length - 1]).toFixed(2) })
             this.setState({ hundredDayHigh : hundredDayHigh.toFixed(2) })
             this.setState({ hundredDayLow : hundredDayLow.toFixed(2) })
             this.setState({ pastSeven : pastSevenStr })
@@ -235,13 +235,13 @@ class StockQuery extends Component {
                                         gutterBottom
                                         variant="body2"
                                         >
-                                        PREV OPEN
+                                        PREV CLOSE
                                         </Typography>
                                         <Typography
                                         color="inherit"
                                         variant="h3"
                                         >
-                                            $ {this.state.prevOpen}
+                                            $ {this.state.prevClose}
                                         </Typography>
                                     </Grid>
                                 </Grid>
