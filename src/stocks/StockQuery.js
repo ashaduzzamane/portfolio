@@ -162,12 +162,13 @@ class StockQuery extends Component {
 
     render() {
         const cardStyleBottom = {
-            backgroundColor: '#CDCDCD',
+            backgroundColor: '#ebebeb',
             color : '#364059'
         }
         const cardStyleSide = {
             backgroundColor: '#364059',
-            color : 'white'
+            color : 'white',
+            marginBottom: 25
         }
         const paperStyle = {
             height: 480,

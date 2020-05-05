@@ -6,6 +6,7 @@ import Input from '@material-ui/core/Input';
 import FormControl from '@material-ui/core/FormControl';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import NativeSelect from '@material-ui/core/NativeSelect';
+import MuiAlert from '@material-ui/lab/Alert';
 import '../css/RealEstate.css'
 
 class AddPropertyPopup extends Component {
@@ -23,24 +24,29 @@ class AddPropertyPopup extends Component {
             mortgage: '',
             taxes: '',
             insurance: '',
-            miscExpenses: ''
+            miscExpenses: '',
+            showErrorAllFields: false
         }
     }
 
     handleSave = event => {
-        var actionType = "save"
-        var type = this.state.type
-        var address = this.state.address
-        var price = this.state.price
-        var investment = parseInt(this.state.downPayment, 10) + parseInt(this.state.closingCosts, 10) + parseInt(this.state.rehabCosts, 10)
-        console.log(investment)
-        var totalExpenses = parseInt(this.state.mortgage, 10) + parseInt(this.state.taxes, 10) + parseInt(this.state.insurance, 10) + parseInt(this.state.miscExpenses, 10)
-        console.log(totalExpenses)
-        var totalRevenue = parseInt(this.state.rent, 10) + parseInt(this.state.principle, 10)
-        var cashflow = parseInt(this.state.rent, 10) - totalExpenses
-        var cashOnCash = ((cashflow * 12) / investment) * 100
-        var internalRate = (((totalRevenue - totalExpenses) * 12) / investment) * 100
-        this.props.closePopup(actionType, type, address, price, investment, cashflow, cashOnCash.toFixed(1), internalRate.toFixed(1))
+        if(this.state.address !== '' && this.state.type !== '' && this.state.price !== '' && this.state.downPayment !== '' && this.state.closingCosts !== '' && this.state.rehabCosts !== '' && this.state.principle !== '' && this.state.rent !== '' && this.state.mortgage !== '' && this.state.taxes !== '' && this.state.insurance !== '' && this.state.miscExpenses !== '') {
+            var actionType = "save"
+            var type = this.state.type
+            var address = this.state.address
+            var price = this.state.price
+            var investment = parseInt(this.state.downPayment, 10) + parseInt(this.state.closingCosts, 10) + parseInt(this.state.rehabCosts, 10)
+            console.log(investment)
+            var totalExpenses = parseInt(this.state.mortgage, 10) + parseInt(this.state.taxes, 10) + parseInt(this.state.insurance, 10) + parseInt(this.state.miscExpenses, 10)
+            console.log(totalExpenses)
+            var totalRevenue = parseInt(this.state.rent, 10) + parseInt(this.state.principle, 10)
+            var cashflow = parseInt(this.state.rent, 10) - totalExpenses
+            var cashOnCash = ((cashflow * 12) / investment) * 100
+            var internalRate = (((totalRevenue - totalExpenses) * 12) / investment) * 100
+            this.props.closePopup(actionType, type, address, price, investment, cashflow, cashOnCash.toFixed(1), internalRate.toFixed(1))
+        } else {
+            this.setState({ showErrorAllFields : true })
+        }
     }
 
     handleCancel = event => {
@@ -86,6 +92,15 @@ class AddPropertyPopup extends Component {
             display: 'flex',
             justifyContent: 'space-around',
             marginTop: 5
+        }
+        const alertStyle = {
+            width: '45%',
+            height: '15%'
+        }
+        const alertPosition = {
+            display: 'flex',
+            justifyContent: 'center',
+            margin: 15
         }
 
         return(
@@ -135,7 +150,11 @@ class AddPropertyPopup extends Component {
                             <Input
                                 id="standard-adornment-amount"
                                 value={this.state.price}
-                                onChange = {(event) => { this.setState({ price : event.target.value }) }}
+                                onChange = {(event) => { 
+                                    if(!isNaN(event.target.value)) {
+                                        this.setState({ price : event.target.value })
+                                    }
+                                }}
                                 startAdornment={<InputAdornment position="start">$</InputAdornment>}
                             />
                             </FormControl>
@@ -150,7 +169,11 @@ class AddPropertyPopup extends Component {
                             <Input
                                 id="standard-adornment-amount"
                                 value={this.state.downPayment}
-                                onChange = {(event) => { this.setState({ downPayment : event.target.value }) }}
+                                onChange = {(event) => { 
+                                    if(!isNaN(event.target.value)) {
+                                        this.setState({ downPayment : event.target.value })
+                                    }
+                                }}
                                 startAdornment={<InputAdornment position="start">$</InputAdornment>}
                             />
                             </FormControl>
@@ -165,7 +188,11 @@ class AddPropertyPopup extends Component {
                             <Input
                                 id="standard-adornment-amount"
                                 value={this.state.closingCosts}
-                                onChange = {(event) => { this.setState({ closingCosts : event.target.value }) }}
+                                onChange = {(event) => { 
+                                    if(!isNaN(event.target.value)) {
+                                        this.setState({ closingCosts : event.target.value })
+                                    }
+                                }}
                                 startAdornment={<InputAdornment position="start">$</InputAdornment>}
                             />
                             </FormControl>
@@ -180,7 +207,11 @@ class AddPropertyPopup extends Component {
                             <Input
                                 id="standard-adornment-amount"
                                 value={this.state.rehabCosts}
-                                onChange = {(event) => { this.setState({ rehabCosts : event.target.value }) }}
+                                onChange = {(event) => { 
+                                    if(!isNaN(event.target.value)) {
+                                        this.setState({ rehabCosts : event.target.value })
+                                    }
+                                }}
                                 startAdornment={<InputAdornment position="start">$</InputAdornment>}
                             />
                             </FormControl>
@@ -197,7 +228,11 @@ class AddPropertyPopup extends Component {
                             <Input
                                 id="standard-adornment-amount"
                                 value={this.state.principle}
-                                onChange = {(event) => { this.setState({ principle : event.target.value }) }}
+                                onChange = {(event) => { 
+                                    if(!isNaN(event.target.value)) {
+                                        this.setState({ principle : event.target.value })
+                                    }
+                                }}
                                 startAdornment={<InputAdornment position="start">$</InputAdornment>}
                             />
                             </FormControl>
@@ -212,7 +247,11 @@ class AddPropertyPopup extends Component {
                             <Input
                                 id="standard-adornment-amount"
                                 value={this.state.rent}
-                                onChange = {(event) => { this.setState({ rent : event.target.value }) }}
+                                onChange = {(event) => { 
+                                    if(!isNaN(event.target.value)) {
+                                        this.setState({ rent : event.target.value })
+                                    }
+                                }}
                                 startAdornment={<InputAdornment position="start">$</InputAdornment>}
                             />
                             </FormControl>
@@ -227,7 +266,11 @@ class AddPropertyPopup extends Component {
                             <Input
                                 id="standard-adornment-amount"
                                 value={this.state.mortgage}
-                                onChange = {(event) => { this.setState({ mortgage : event.target.value }) }}
+                                onChange = {(event) => { 
+                                    if(!isNaN(event.target.value)) {
+                                        this.setState({ mortgage : event.target.value })
+                                    }
+                                }}
                                 startAdornment={<InputAdornment position="start">$</InputAdornment>}
                             />
                             </FormControl>
@@ -242,7 +285,11 @@ class AddPropertyPopup extends Component {
                             <Input
                                 id="standard-adornment-amount"
                                 value={this.state.taxes}
-                                onChange = {(event) => { this.setState({ taxes : event.target.value }) }}
+                                onChange = {(event) => { 
+                                    if(!isNaN(event.target.value)) {
+                                        this.setState({ taxes : event.target.value })
+                                    }
+                                }}
                                 startAdornment={<InputAdornment position="start">$</InputAdornment>}
                             />
                             </FormControl>
@@ -257,7 +304,11 @@ class AddPropertyPopup extends Component {
                             <Input
                                 id="standard-adornment-amount"
                                 value={this.state.insurance}
-                                onChange = {(event) => { this.setState({ insurance : event.target.value }) }}
+                                onChange = {(event) => { 
+                                    if(!isNaN(event.target.value)) {
+                                        this.setState({ insurance : event.target.value })
+                                    }
+                                }}
                                 startAdornment={<InputAdornment position="start">$</InputAdornment>}
                             />
                             </FormControl>
@@ -272,7 +323,11 @@ class AddPropertyPopup extends Component {
                             <Input
                                 id="standard-adornment-amount"
                                 value={this.state.miscExpenses}
-                                onChange = {(event) => { this.setState({ miscExpenses : event.target.value }) }}
+                                onChange = {(event) => { 
+                                    if(!isNaN(event.target.value)) {
+                                        this.setState({ miscExpenses : event.target.value }) 
+                                    }
+                                }}
                                 startAdornment={<InputAdornment position="start">$</InputAdornment>}
                             />
                             </FormControl>
@@ -291,6 +346,12 @@ class AddPropertyPopup extends Component {
                             </Typography>
                         </Button>
                     </div>
+                    {this.state.showErrorAllFields ? 
+                        <div style={alertPosition}>
+                            <MuiAlert style={alertStyle} severity="error">Please fill in all fields</MuiAlert>
+                        </div>
+                    : null
+                    }
                 </div>  
             </div> 
         )
