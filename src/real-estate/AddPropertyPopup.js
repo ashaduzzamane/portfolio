@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import InputLabel from '@material-ui/core/InputLabel';
 import Input from '@material-ui/core/Input';
 import FormControl from '@material-ui/core/FormControl';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import MuiAlert from '@material-ui/lab/Alert';
+import { connect } from 'react-redux';
 import '../css/RealEstate.css'
 
 class AddPropertyPopup extends Component {
@@ -43,7 +43,8 @@ class AddPropertyPopup extends Component {
             var cashflow = parseInt(this.state.rent, 10) - totalExpenses
             var cashOnCash = ((cashflow * 12) / investment) * 100
             var internalRate = (((totalRevenue - totalExpenses) * 12) / investment) * 100
-            this.props.closePopup(actionType, type, address, price, investment, cashflow, cashOnCash.toFixed(1), internalRate.toFixed(1))
+            this.props.closePopup(actionType, type, address, parseInt(price, 10), investment, cashflow, cashOnCash.toFixed(1), internalRate.toFixed(1), totalExpenses, parseInt(this.state.rent, 10), parseInt(this.state.principle, 10))
+            // this.props.onAddDashboardRealEstateInvestment(this.props.nextIndex, type, address, parseInt(price, 10), investment, cashflow, cashOnCash.toFixed(1), internalRate.toFixed(1), totalExpenses, parseInt(this.state.rent, 10), parseInt(this.state.principle, 10))
         } else {
             this.setState({ showErrorAllFields : true })
         }
@@ -358,4 +359,23 @@ class AddPropertyPopup extends Component {
     }
 }
 
-export default AddPropertyPopup;
+const mapDispatchToProps = dispatch => {
+    return {
+        onAddDashboardRealEstateInvestment : (argPropertyID, argType, argAddress, argRealEstateAsset, argRealEstateInvestment, argCashflow, argCashOnCash, argInternalRate, argRealEstateExpenses, argRealEstateRevenue, argRealEstatePrinciple) => dispatch({
+            type: "ADD_DASHBOARD_REAL_ESTATE_INVESTMENT",
+            propertyID : argPropertyID,
+            propertyType : argType,
+            propertyAddress: argAddress,
+            realEstateAsset : argRealEstateAsset,
+            realEstateInvestment : argRealEstateInvestment,
+            propertyCashflow : argCashflow,
+            propertyCashOnCash : argCashOnCash,
+            propertyInternalRate : argInternalRate, 
+            realEstateExpenses : argRealEstateExpenses,
+            realEstateRevenue : argRealEstateRevenue,
+            realEstatePrinciple : argRealEstatePrinciple,
+        })
+    };
+}
+
+export default connect(null, mapDispatchToProps)(AddPropertyPopup);

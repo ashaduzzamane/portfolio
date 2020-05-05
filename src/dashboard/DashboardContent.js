@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { Line, Doughnut, Pie, Bar, HorizontalBar } from 'react-chartjs-2'
-import Paper from '@material-ui/core/Paper';
 import Projection from './Projection'
 import SideStats from './SideStats'
 import Cashflow from './Cashflow'
 import Investment from './Investment'
+import { connect } from 'react-redux';
 import '../css/Stock.css'
 
 class DashboardContent extends Component {
@@ -17,6 +16,18 @@ class DashboardContent extends Component {
                 cash: 0
             }
         }
+    }
+
+    componentWillMount() {
+        var realEstateInvestments = 0
+        var realEstateAssets = 0
+        this.props.RealEstateData.propertiesList.forEach(property => {
+            realEstateInvestments = realEstateInvestments + parseInt(property.investment, 10)
+            realEstateAssets = realEstateAssets + parseInt(property.price, 10)
+        })
+        var investment  = this.state.investment
+        investment.realEstate = realEstateInvestments
+        this.setState({ investment : investment })
     }
 
     render() {
@@ -40,4 +51,10 @@ class DashboardContent extends Component {
     }
 }
 
-export default DashboardContent;
+function mapStateToProps(state) {
+    return {
+        RealEstateData : state.RealEstateData
+    };
+}
+
+export default connect(mapStateToProps)(DashboardContent);

@@ -7,6 +7,8 @@ import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import AddPropertyPopup from './AddPropertyPopup';
+import { connect } from 'react-redux';
+
 
 class RealEstateContent extends Component {
     constructor(props) {
@@ -29,13 +31,21 @@ class RealEstateContent extends Component {
         }
     }
 
+    componentWillMount() {
+        if(this.state.propertiesData !== this.props.RealEstateData.propertiesList) {
+            this.setState({ propertiesData : this.props.RealEstateData.propertiesList })
+            console.log("done")
+        }
+        console.log(this.state.propertiesData)
+    }
+
     togglePopup = event => {  
         this.setState({  
             showPopup: !this.state.showPopup  
         });  
     }  
 
-    handleClose = (argActionType, argType, argAddress, argPrice, argInvestment, argCashflow, argCashOnCash, argInternalRate) => {
+    handleClose = (argActionType, argType, argAddress, argPrice, argInvestment, argCashflow, argCashOnCash, argInternalRate, argTotalExpenses, argTotalRevenue, argPrinciple) => {
         console.log(argActionType)
         if(argActionType === "save") {
             var propertiesData = this.state.propertiesData
@@ -49,10 +59,15 @@ class RealEstateContent extends Component {
                     investment: argInvestment,
                     cashflow: argCashflow,
                     cashOnCash: argCashOnCash,
-                    internalRate: argInternalRate
+                    internalRate: argInternalRate,
+                    totalExpenses: argTotalExpenses,
+                    totalRevenue: argTotalRevenue,
+                    princple: argPrinciple
                 }
             )
+            console.log(propertiesData)
             this.setState({ propertiesData : propertiesData })
+            this.props.onUpdateDashboardRealEstateInvestment(propertiesData)
             this.setState({ nextIndex : (index + 1) })
         }
         this.togglePopup()
@@ -72,6 +87,7 @@ class RealEstateContent extends Component {
             property.id = newIndex
             newIndex++
         })
+        this.props.onUpdateDashboardRealEstateInvestment(propertiesData)
         this.setState({ propertiesData : propertiesData })
     }
 
@@ -207,6 +223,7 @@ class RealEstateContent extends Component {
                 </Card>
                 {this.state.showPopup ? 
                     <AddPropertyPopup 
+                        {...this.state}
                         closePopup={this.handleClose}
                     />
                     : null
@@ -216,4 +233,19 @@ class RealEstateContent extends Component {
     }
 }
 
-export default RealEstateContent;
+const mapDispatchToProps = dispatch => {
+    return {
+        onUpdateDashboardRealEstateInvestment : (argPropertiesData) => dispatch({
+            type: "UPDATE_DASHBOARD_REAL_ESTATE_INVESTMENT",
+            propertiesData : argPropertiesData
+        })
+    };
+}
+
+function mapStateToProps(state) {
+    return {
+        RealEstateData : state.RealEstateData
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(RealEstateContent);
