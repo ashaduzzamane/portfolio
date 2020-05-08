@@ -153,9 +153,9 @@ export default function LandingPage() {
                         Real Estate
                     </Typography>
                 </Route>
-                <Route exact path={[ "/loans" ]}>
+                <Route exact path={[ "/financial-institution" ]}>
                     <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-                        Loans
+                        Financial Institution
                     </Typography>
                 </Route>
                 <Route exact path={[ "/mortgage-calculator" ]}>
@@ -200,7 +200,7 @@ export default function LandingPage() {
           <Route exact path={[ "/" ]} render={props => <Dashboard {...props} refreshRoute={[ "/" ]} /> } />
           <Route exact path={"/stocks"} render={props => <Stocks {...props} refreshRoute={"/stocks"} /> } />
           <Route exact path={"/real-estate"} render={props => <RealEstate {...props} refreshRoute={"/real-estate"} /> } />
-          <Route exact path={"/loans"} render={props => <Loans {...props} refreshRoute={"/loans"} /> } />
+          <Route exact path={"/financial-institution"} render={props => <Loans {...props} refreshRoute={"/financial-institution"} /> } />
           <Route exact path={"/mortgage-calculator"} render={props => <MortgageCalculator {...props} refreshRoute={"/mortgage-calculator"} /> } />
           <Route exact path={"/cashflow-calculator"} render={props => <CashflowCalculator {...props} refreshRoute={"/cashflow-calculator"} /> } />
         </Switch>

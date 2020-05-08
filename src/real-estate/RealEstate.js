@@ -3,7 +3,6 @@ import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
 import RealEstateContent from './RealEstateContent';
 
 const useStyles = makeStyles(theme => ({

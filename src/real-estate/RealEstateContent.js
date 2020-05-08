@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import AddPropertyPopup from './AddPropertyPopup';
 import { connect } from 'react-redux';
+import axios from 'axios';
 
 
 class RealEstateContent extends Component {
@@ -15,28 +16,67 @@ class RealEstateContent extends Component {
         super(props);
         this.state = {
             showPopup: false,
-            nextIndex: 1,
+            sqlIndex: 1,
+            propertyCount: 1,
             propertiesData: [
                 // {
                 //     id: 1,
+                //     propertyCount: 2,
                 //     type: 'Duplex',
                 //     address: '7911 Rue Baribeau, LaSalle, QC',
                 //     price: '500000',
                 //     investment: '45000',
                 //     cashflow: '400',
                 //     cashOnCash: '10.4',
-                //     internalRate: '39.8'
+                //     internalRate: '39.8',
+                //     principle: 1300
                 // }
             ]
         }
     }
 
     componentWillMount() {
-        if(this.state.propertiesData !== this.props.RealEstateData.propertiesList) {
-            this.setState({ propertiesData : this.props.RealEstateData.propertiesList })
-            console.log("done")
-        }
-        console.log(this.state.propertiesData)
+        axios.get('http://localhost:3000/v1/properties')
+        .then(response => {
+            console.log(response)
+            var propertyCount = 0
+            var sqlIndex = 0
+            var propertiesData = []
+            for (var i=0; i<response.data.data.length; i++) {
+                var property = response.data.data[i]
+                var cashflow = parseInt(property.propertyRevenue, 10) - parseInt(property.propertyExpenses, 10)
+                var cashOnCash = ((cashflow * 12) / parseInt(property.propertyInvestment, 10)) * 100
+                var internalRate = (((parseInt(property.propertyPrinciple, 10) + cashflow) * 12) / parseInt(property.propertyInvestment, 10)) * 100
+                propertiesData.push(
+                    {
+                        id: property.id,
+                        propertyCount: i+1,
+                        type: property.propertyType,
+                        address: property.propertyAddress,
+                        price: parseInt(property.propertyCost, 10),
+                        investment: parseInt(property.propertyInvestment, 10),
+                        cashflow: cashflow,
+                        cashOnCash: cashOnCash.toFixed(2),
+                        internalRate: internalRate.toFixed(2),
+                        principle: parseInt(property.propertyPrinciple, 10)
+                    }
+                )
+                sqlIndex = property.id
+                propertyCount++
+            }
+            console.log(sqlIndex)
+            this.setState({ sqlIndex : (parseInt(sqlIndex, 10) + 1) })
+            this.setState({ propertyCount : (propertyCount + 1) })
+            this.setState({ propertiesData : propertiesData })
+            this.props.onUpdateDashboardRealEstateInvestment(propertiesData)
+        })
+        .catch(error => {
+            console.log(error)
+            if(this.state.propertiesData !== this.props.RealEstateData.propertiesList) {
+                this.setState({ propertiesData : this.props.RealEstateData.propertiesList })
+                console.log("done")
+            }
+        })
     }
 
     togglePopup = event => {  
@@ -46,46 +86,69 @@ class RealEstateContent extends Component {
     }  
 
     handleClose = (argActionType, argType, argAddress, argPrice, argInvestment, argCashflow, argCashOnCash, argInternalRate, argTotalExpenses, argTotalRevenue, argPrinciple) => {
-        console.log(argActionType)
         if(argActionType === "save") {
             var propertiesData = this.state.propertiesData
-            var index = this.state.nextIndex
+            var index = this.state.propertyCount
+            var sqlIndex = this.state.sqlIndex
             propertiesData.push(
                 {
-                    id: index,
+                    id: sqlIndex,
+                    propertyCount: index,
                     type: argType,
                     address: argAddress,
-                    price: argPrice,
-                    investment: argInvestment,
+                    price: argPrice.toString(),
+                    investment: argInvestment.toString(),
                     cashflow: argCashflow,
                     cashOnCash: argCashOnCash,
                     internalRate: argInternalRate,
-                    totalExpenses: argTotalExpenses,
-                    totalRevenue: argTotalRevenue,
-                    princple: argPrinciple
+                    totalExpenses: argTotalExpenses.toString(),
+                    totalRevenue: argTotalRevenue.toString(),
+                    principle: argPrinciple.toString()
                 }
             )
-            console.log(propertiesData)
             this.setState({ propertiesData : propertiesData })
             this.props.onUpdateDashboardRealEstateInvestment(propertiesData)
-            this.setState({ nextIndex : (index + 1) })
+            this.setState({ propertyCount : (index + 1) })
+            this.setState({ sqlIndex : (sqlIndex + 1) })
+
+            axios.post('http://localhost:3000/v1/properties', {
+                "propertyType" : propertiesData[0].type,
+                "propertyAddress" : propertiesData[0].address,
+                "propertyCost" : propertiesData[0].price,
+                "propertyInvestment" : propertiesData[0].investment,
+                "propertyExpenses" : propertiesData[0].totalExpenses,
+                "propertyRevenue" : propertiesData[0].totalRevenue,
+                "propertyPrinciple" : propertiesData[0].principle
+            })
+            .then(response => {
+                console.log(response)
+            })
         }
         this.togglePopup()
     }
 
     handleDelete = (e, itemID) => {
+        console.log(itemID)
         var propertiesData = this.state.propertiesData
-        var nextIndex = propertiesData.length
-        this.setState({ nextIndex : nextIndex })
+        var propertyCount = propertiesData.length
+        this.setState({ propertyCount : propertyCount })
         propertiesData.forEach(property => {
-            if(itemID == property.id) {
-                propertiesData.splice(( property.id - 1) , 1)
+            if(itemID == property.propertyCount) {
+                var deleteURL = 'http://localhost:3000/v1/properties/'+property.id.toString()
+                axios.delete(deleteURL)
+                .then(response => {
+                    console.log(response)
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+                propertiesData.splice(( property.propertyCount - 1) , 1)
             }
         })
-        var newIndex = 1
+        var newPropertyCount = 1
         propertiesData.forEach(property => {
-            property.id = newIndex
-            newIndex++
+            property.propertyCount = newPropertyCount
+            newPropertyCount++
         })
         this.props.onUpdateDashboardRealEstateInvestment(propertiesData)
         this.setState({ propertiesData : propertiesData })
@@ -148,7 +211,7 @@ class RealEstateContent extends Component {
                         <CardHeader 
                             avatar={
                                 <Avatar aria-label="Property 1" style={avatarStyle}>
-                                    {property.id}
+                                    {property.propertyCount}
                                 </Avatar>
                             }
                             title={property.type}
@@ -187,11 +250,11 @@ class RealEstateContent extends Component {
                                     EDIT
                                 </Typography>
                             </Button>
-                            <Button id={property.id} variant="outlined" style={buttonStyleDelete}>
+                            <Button id={property.propertyCount} variant="outlined" style={buttonStyleDelete}>
                                 <Typography
                                     color="inherit"
                                     variant="h6"
-                                    onClick={((e) => this.handleDelete(e, property.id))}
+                                    onClick={((e) => this.handleDelete(e, property.propertyCount))}
                                 >
                                     DELETE
                                 </Typography>
@@ -204,7 +267,7 @@ class RealEstateContent extends Component {
                     <CardHeader 
                         avatar={
                             <Avatar aria-label="Property 1" style={avatarStyle}>
-                                {this.state.nextIndex}
+                                {this.state.propertyCount}
                             </Avatar>
                         }
                         title="Property Type"

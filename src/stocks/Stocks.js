@@ -16,7 +16,7 @@ const useStyles = makeStyles(theme => ({
     container: {
         paddingTop: theme.spacing(4),
         paddingBottom: theme.spacing(4),
-        paddingLeft: theme.spacing(16)
+        // paddingLeft: theme.spacing(16)
     },
     paper: {
         padding: theme.spacing(2),
@@ -42,7 +42,6 @@ export default function Stocks() {
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
         <Grid container spacing={3}>
-
             <Grid item xs={12} md={12} lg={12}>
                 {/* <Paper className={fixedHeightPaperTop}> */}
                     <StockQuery />

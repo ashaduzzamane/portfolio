@@ -4,6 +4,7 @@ import SideStats from './SideStats'
 import Cashflow from './Cashflow'
 import Investment from './Investment'
 import { connect } from 'react-redux';
+import axios from 'axios'
 import '../css/Stock.css'
 
 class DashboardContent extends Component {
@@ -19,15 +20,23 @@ class DashboardContent extends Component {
     }
 
     componentWillMount() {
-        var realEstateInvestments = 0
-        var realEstateAssets = 0
-        this.props.RealEstateData.propertiesList.forEach(property => {
-            realEstateInvestments = realEstateInvestments + parseInt(property.investment, 10)
-            realEstateAssets = realEstateAssets + parseInt(property.price, 10)
+        // var realEstateInvestments = 0
+        // var realEstateAssets = 0
+        // this.props.RealEstateData.propertiesList.forEach(property => {
+        //     realEstateInvestments = realEstateInvestments + parseInt(property.investment, 10)
+        //     realEstateAssets = realEstateAssets + parseInt(property.price, 10)
+        // })
+        // var investment  = this.state.investment
+        // investment.realEstate = realEstateInvestments
+        // this.setState({ investment : investment })
+
+        axios.get("http://localhost:3000/v1/properties")
+        .then(response => {
+            console.log(response)
         })
-        var investment  = this.state.investment
-        investment.realEstate = realEstateInvestments
-        this.setState({ investment : investment })
+        .catch(error => {
+            console.log(error)
+        })
     }
 
     render() {

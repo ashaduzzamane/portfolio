@@ -31,12 +31,12 @@ export const mainListItems = (
         <ListItemText primary="Real Estate" />
       </ListItem>
     </Link>
-    <Link to='/loans' className='NavLink'>
+    <Link to='/financial-institution' className='NavLink'>
       <ListItem button>
         <ListItemIcon>
           <AccountBalanceIcon id="Icon" />
         </ListItemIcon>
-        <ListItemText primary="Loans" />
+        <ListItemText primary="Financial Institution" />
       </ListItem>
     </Link>
   </div>
@@ -45,14 +45,14 @@ export const mainListItems = (
 export const secondaryListItems = (
   <div>
     <ListSubheader id="Icon" inset>Tools</ListSubheader>
-    <Link to='/mortgage-calculator' className='NavLink'>
+    {/* <Link to='/mortgage-calculator' className='NavLink'>
       <ListItem button>
         <ListItemIcon>
           <HomeIcon id="Icon" />
         </ListItemIcon>
         <ListItemText primary="Mortgage Calculator" />
       </ListItem>
-    </Link>
+    </Link> */}
     <Link to='/cashflow-calculator' className='NavLink'>
       <ListItem button>
         <ListItemIcon>

@@ -44,7 +44,6 @@ class AddPropertyPopup extends Component {
             var cashOnCash = ((cashflow * 12) / investment) * 100
             var internalRate = (((totalRevenue - totalExpenses) * 12) / investment) * 100
             this.props.closePopup(actionType, type, address, parseInt(price, 10), investment, cashflow, cashOnCash.toFixed(1), internalRate.toFixed(1), totalExpenses, parseInt(this.state.rent, 10), parseInt(this.state.principle, 10))
-            // this.props.onAddDashboardRealEstateInvestment(this.props.nextIndex, type, address, parseInt(price, 10), investment, cashflow, cashOnCash.toFixed(1), internalRate.toFixed(1), totalExpenses, parseInt(this.state.rent, 10), parseInt(this.state.principle, 10))
         } else {
             this.setState({ showErrorAllFields : true })
         }
@@ -361,20 +360,20 @@ class AddPropertyPopup extends Component {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onAddDashboardRealEstateInvestment : (argPropertyID, argType, argAddress, argRealEstateAsset, argRealEstateInvestment, argCashflow, argCashOnCash, argInternalRate, argRealEstateExpenses, argRealEstateRevenue, argRealEstatePrinciple) => dispatch({
-            type: "ADD_DASHBOARD_REAL_ESTATE_INVESTMENT",
-            propertyID : argPropertyID,
-            propertyType : argType,
-            propertyAddress: argAddress,
-            realEstateAsset : argRealEstateAsset,
-            realEstateInvestment : argRealEstateInvestment,
-            propertyCashflow : argCashflow,
-            propertyCashOnCash : argCashOnCash,
-            propertyInternalRate : argInternalRate, 
-            realEstateExpenses : argRealEstateExpenses,
-            realEstateRevenue : argRealEstateRevenue,
-            realEstatePrinciple : argRealEstatePrinciple,
-        })
+        // onAddDashboardRealEstateInvestment : (argPropertyID, argType, argAddress, argRealEstateAsset, argRealEstateInvestment, argCashflow, argCashOnCash, argInternalRate, argRealEstateExpenses, argRealEstateRevenue, argRealEstatePrinciple) => dispatch({
+        //     type: "ADD_DASHBOARD_REAL_ESTATE_INVESTMENT",
+        //     propertyID : argPropertyID,
+        //     propertyType : argType,
+        //     propertyAddress: argAddress,
+        //     realEstateAsset : argRealEstateAsset,
+        //     realEstateInvestment : argRealEstateInvestment,
+        //     propertyCashflow : argCashflow,
+        //     propertyCashOnCash : argCashOnCash,
+        //     propertyInternalRate : argInternalRate, 
+        //     realEstateExpenses : argRealEstateExpenses,
+        //     realEstateRevenue : argRealEstateRevenue,
+        //     realEstatePrinciple : argRealEstatePrinciple,
+        // })
     };
 }
 
