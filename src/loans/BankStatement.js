@@ -9,6 +9,8 @@ import TableHead from '@material-ui/core/TableHead';
 import { Typography, Divider } from '@material-ui/core';
 import TableRow from '@material-ui/core/TableRow';
 import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import ClearIcon from '@material-ui/icons/Clear';
 
 class BankStatement extends Component {
     constructor(props) {
@@ -84,16 +86,9 @@ class BankStatement extends Component {
             marginLeft: 16,
             paddingTop: 12
         }
-        const buttonStyle = {
-            backgroundColor: '#364059',
-            color : 'white',
-            width : 140,
-            height : 35,
-            marginRight: 10
-        }
         const rootStyle ={
             display: 'flex',
-            justifyContent: 'space-between',
+            // justifyContent: 'space-between',
             alignItems: 'center',
             height: 70
         }
@@ -106,10 +101,26 @@ class BankStatement extends Component {
             marginTop: 10,
             borderRadius: '20px'
         }
+        const DeleteBtnStyle = {
+            backgroundColor: '#999999',
+            color : 'white',
+            width : 100,
+            height : 35,
+            marginTop: 10,
+            borderRadius: '20px'
+        }
         const EditBtnContainer = {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
+        }
+        const AddBtnStyle = {
+            backgroundColor: '#364059',
+            color : 'white',
+            width : 100,
+            height : 35,
+            marginTop: 10,
+            borderRadius: '20px'
         }
         return(
         <div>
@@ -118,11 +129,6 @@ class BankStatement extends Component {
                 <Typography style={marginTypo} color="inherit" variant="h6">
                     Assets
                 </Typography>
-                <Button variant="outlined" style={buttonStyle}>
-                    <Typography color="inherit" variant="subtitle2">
-                        Add Asset
-                    </Typography>
-                </Button>
             </div>
             <Divider />
             <TableContainer>
@@ -139,6 +145,7 @@ class BankStatement extends Component {
                       </TableCell>
                     ))}
                     <TableCell key='edit' align='left' style={{ minWidth: 170 }}></TableCell>
+                    <TableCell key='delete' align='left' style={{ minWidth: 150 }}></TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -162,9 +169,37 @@ class BankStatement extends Component {
                                 </Button>
                             </div>
                         </TableCell>
+                        <TableCell align='left' key='edit'>
+                            <div style={EditBtnContainer}> 
+                                <Button variant="outlined" style={DeleteBtnStyle} id={row.id} onClick={((e) => this.handleEdit(e, row.id))}>
+                                    <ClearIcon />
+                                </Button>
+                            </div>
+                        </TableCell>
                     </TableRow>
                     );
-                  })}
+                })}
+                <TableRow>
+                    <TableCell rowSpan={1}>
+                        <TextField id="outlined-basic" variant="outlined" />
+                    </TableCell>
+                    <TableCell rowSpan={1}>
+                        <TextField id="outlined-basic" variant="outlined" />    
+                    </TableCell>
+                    <TableCell rowSpan={1}>
+                        <TextField id="outlined-basic" variant="outlined" />
+                    </TableCell>
+                    <TableCell rowSpan={1}>
+                        <div style={EditBtnContainer}> 
+                            <Button variant="outlined" style={AddBtnStyle} >
+                                <Typography color="inherit">
+                                    Add
+                                </Typography>
+                            </Button>
+                        </div>
+                    </TableCell>
+                    <TableCell></TableCell>
+                </TableRow>
                     <TableRow>
                         <TableCell rowSpan={2} />
                         <TableCell align="left" colSpan={1}><b>Total Assets</b></TableCell>
@@ -179,11 +214,6 @@ class BankStatement extends Component {
                 <Typography style={marginTypo} color="inherit" variant="h6">
                     Liabilities
                 </Typography>
-                <Button variant="outlined" style={buttonStyle}>
-                    <Typography color="inherit" variant="subtitle2">
-                        Add Liability
-                    </Typography>
-                </Button>
             </div>
             <Divider />
             <TableContainer>
@@ -199,8 +229,9 @@ class BankStatement extends Component {
                             <b>{column.label}</b>
                           </TableCell>
                         ))}
-                    <TableCell key='edit' align='left' style={{ minWidth: 170 }}></TableCell>
-                      </TableRow>
+                        <TableCell key='edit' align='left' style={{ minWidth: 170 }}></TableCell>
+                        <TableCell key='delete' align='left' style={{ minWidth: 170 }}></TableCell>
+                    </TableRow>
                     </TableHead>
                     <TableBody>
                       {this.state.rowsLiabilities.map((row) => {
@@ -223,9 +254,37 @@ class BankStatement extends Component {
                                     </Button>
                                 </div>
                             </TableCell>
+                            <TableCell align='left' key='edit'>
+                                <div style={EditBtnContainer}> 
+                                    <Button variant="outlined" style={DeleteBtnStyle} id={row.id} onClick={((e) => this.handleEdit(e, row.id))}>
+                                        <ClearIcon />
+                                    </Button>
+                                </div>
+                            </TableCell>
                         </TableRow>
                         );
                       })}
+                    <TableRow>
+                        <TableCell rowSpan={1}>
+                            <TextField id="outlined-basic" variant="outlined" />
+                        </TableCell>
+                        <TableCell rowSpan={1}>
+                            <TextField id="outlined-basic" variant="outlined" />    
+                        </TableCell>
+                        <TableCell rowSpan={1}>
+                            <TextField id="outlined-basic" variant="outlined" />
+                        </TableCell>
+                        <TableCell rowSpan={1}>
+                            <div style={EditBtnContainer}> 
+                                <Button variant="outlined" style={AddBtnStyle} >
+                                    <Typography color="inherit">
+                                        Add
+                                    </Typography>
+                                </Button>
+                            </div>
+                        </TableCell>
+                        <TableCell></TableCell>
+                    </TableRow>
                     <TableRow>
                         <TableCell rowSpan={2} />
                         <TableCell align="left" colSpan={1}><b>Total Liabilities</b></TableCell>

@@ -41,7 +41,7 @@ export default function Loans() {
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
             <Grid container spacing={3}>
-                <Grid item xs={12} md={12} lg={8}>
+                <Grid item xs={12} md={12} lg={9}>
                     <BankStatement />
                 </Grid>
             </Grid>

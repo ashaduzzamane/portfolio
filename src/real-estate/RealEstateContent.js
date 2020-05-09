@@ -15,6 +15,8 @@ class RealEstateContent extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            popupType: '',
+            editID: 0,
             showPopup: false,
             sqlIndex: 1,
             propertyCount: 1,
@@ -80,12 +82,23 @@ class RealEstateContent extends Component {
     }
 
     togglePopup = event => {  
-        this.setState({  
-            showPopup: !this.state.showPopup  
-        });  
-    }  
+        this.setState({ popupType : 'ADD' })
+        this.setState({ showPopup: !this.state.showPopup }); 
+    } 
 
-    handleClose = (argActionType, argType, argAddress, argPrice, argInvestment, argCashflow, argCashOnCash, argInternalRate, argTotalExpenses, argTotalRevenue, argPrinciple) => {
+    toggleEdit = (e, id) => {  
+        this.setState({ editID : id })
+        this.setState({ popupType : 'EDIT' })
+        this.setState({ showPopup: !this.state.showPopup }); 
+    }  
+    
+    handleClose = (
+        argActionType, argType, argAddress, argPrice, 
+        argDownPayment, argClosingCosts, argRehabCosts, 
+        argPrinciple, argRent, 
+        argMortgage, argTaxes, argInsurance, argMiscExpenses, 
+        argInvestment, argCashflow, argCashOnCash, argInternalRate
+        ) => {
         if(argActionType === "save") {
             var propertiesData = this.state.propertiesData
             var index = this.state.propertyCount
@@ -96,14 +109,20 @@ class RealEstateContent extends Component {
                     propertyCount: index,
                     type: argType,
                     address: argAddress,
-                    price: argPrice.toString(),
-                    investment: argInvestment.toString(),
+                    price: argPrice,
+                    downPayment: argDownPayment,
+                    closingCosts: argClosingCosts,
+                    rehabCosts: argRehabCosts,
+                    principle: argPrinciple,
+                    rent: argRent,
+                    mortgage: argMortgage,
+                    taxes: argTaxes,
+                    insurance: argInsurance,
+                    miscExpenses: argMiscExpenses,
+                    investment: argInvestment,
                     cashflow: argCashflow,
                     cashOnCash: argCashOnCash,
-                    internalRate: argInternalRate,
-                    totalExpenses: argTotalExpenses.toString(),
-                    totalRevenue: argTotalRevenue.toString(),
-                    principle: argPrinciple.toString()
+                    internalRate: argInternalRate
                 }
             )
             this.setState({ propertiesData : propertiesData })
@@ -190,7 +209,7 @@ class RealEstateContent extends Component {
             margin : 10
         }
         const buttonStyleDelete = {
-            backgroundColor: '#552020',
+            backgroundColor: '#999999',
             color : 'white',
             width : 130,
             height : 40,
@@ -242,7 +261,7 @@ class RealEstateContent extends Component {
                             </Typography>
                         </CardContent>
                         <div style={buttonSpace}>
-                            <Button variant="outlined" style={buttonStyleEdit} onClick={this.togglePopup}>
+                            <Button variant="outlined" style={buttonStyleEdit} onClick={((e) => this.toggleEdit(e, property.id))}>
                                 <Typography
                                     color="inherit"
                                     variant="h6"

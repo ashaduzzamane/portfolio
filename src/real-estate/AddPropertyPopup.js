@@ -13,7 +13,7 @@ class AddPropertyPopup extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            type: '',
+            propertyType: '',
             address: '',
             price: '',
             downPayment: '',
@@ -29,10 +29,24 @@ class AddPropertyPopup extends Component {
         }
     }
 
+    componentWillMount() {
+        if(this.props.popupType === 'EDIT') {
+            this.props.propertiesData.forEach(property => {
+                if(property.id === this.props.editID) {
+                    this.setState({ address : property.address })
+                    this.setState({ propertyType : property.type })
+                    this.setState({ price : property.price })
+                    this.setState({ principle : property.principle })
+                    this.setState({ rent : property.totalRevenue })
+                }
+            })
+        }
+    }
+
     handleSave = event => {
-        if(this.state.address !== '' && this.state.type !== '' && this.state.price !== '' && this.state.downPayment !== '' && this.state.closingCosts !== '' && this.state.rehabCosts !== '' && this.state.principle !== '' && this.state.rent !== '' && this.state.mortgage !== '' && this.state.taxes !== '' && this.state.insurance !== '' && this.state.miscExpenses !== '') {
+        if(this.state.address !== '' && this.state.propertyType !== '' && this.state.price !== '' && this.state.downPayment !== '' && this.state.closingCosts !== '' && this.state.rehabCosts !== '' && this.state.principle !== '' && this.state.rent !== '' && this.state.mortgage !== '' && this.state.taxes !== '' && this.state.insurance !== '' && this.state.miscExpenses !== '') {
             var actionType = "save"
-            var type = this.state.type
+            var type = this.state.propertyType
             var address = this.state.address
             var price = this.state.price
             var investment = parseInt(this.state.downPayment, 10) + parseInt(this.state.closingCosts, 10) + parseInt(this.state.rehabCosts, 10)
@@ -43,7 +57,13 @@ class AddPropertyPopup extends Component {
             var cashflow = parseInt(this.state.rent, 10) - totalExpenses
             var cashOnCash = ((cashflow * 12) / investment) * 100
             var internalRate = (((totalRevenue - totalExpenses) * 12) / investment) * 100
-            this.props.closePopup(actionType, type, address, parseInt(price, 10), investment, cashflow, cashOnCash.toFixed(1), internalRate.toFixed(1), totalExpenses, parseInt(this.state.rent, 10), parseInt(this.state.principle, 10))
+            this.props.closePopup(
+                actionType, type, address, parseInt(price, 10), 
+                parseInt(this.state.downPayment, 10), parseInt(this.state.closingCosts, 10), parseInt(this.state.rehabCosts, 10), 
+                parseInt(this.state.principle, 10), parseInt(this.state.rent, 10), 
+                parseInt(this.state.mortgage, 10), parseInt(this.state.taxes, 10), parseInt(this.state.insurance, 10), parseInt(this.state.miscExpenses, 10), 
+                investment, cashflow, cashOnCash.toFixed(1), internalRate.toFixed(1)
+            )
         } else {
             this.setState({ showErrorAllFields : true })
         }
@@ -55,7 +75,7 @@ class AddPropertyPopup extends Component {
     }
 
     handlePropertyChange = event => {
-        this.setState({ type : event.target.value })
+        this.setState({ propertyType : event.target.value })
     }
 
     render(){
@@ -358,23 +378,4 @@ class AddPropertyPopup extends Component {
     }
 }
 
-const mapDispatchToProps = dispatch => {
-    return {
-        // onAddDashboardRealEstateInvestment : (argPropertyID, argType, argAddress, argRealEstateAsset, argRealEstateInvestment, argCashflow, argCashOnCash, argInternalRate, argRealEstateExpenses, argRealEstateRevenue, argRealEstatePrinciple) => dispatch({
-        //     type: "ADD_DASHBOARD_REAL_ESTATE_INVESTMENT",
-        //     propertyID : argPropertyID,
-        //     propertyType : argType,
-        //     propertyAddress: argAddress,
-        //     realEstateAsset : argRealEstateAsset,
-        //     realEstateInvestment : argRealEstateInvestment,
-        //     propertyCashflow : argCashflow,
-        //     propertyCashOnCash : argCashOnCash,
-        //     propertyInternalRate : argInternalRate, 
-        //     realEstateExpenses : argRealEstateExpenses,
-        //     realEstateRevenue : argRealEstateRevenue,
-        //     realEstatePrinciple : argRealEstatePrinciple,
-        // })
-    };
-}
-
-export default connect(null, mapDispatchToProps)(AddPropertyPopup);
+export default AddPropertyPopup;
