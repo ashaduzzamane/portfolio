@@ -6,7 +6,6 @@ import FormControl from '@material-ui/core/FormControl';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import MuiAlert from '@material-ui/lab/Alert';
-import { connect } from 'react-redux';
 import '../css/RealEstate.css'
 
 class AddPropertyPopup extends Component {
@@ -36,8 +35,15 @@ class AddPropertyPopup extends Component {
                     this.setState({ address : property.address })
                     this.setState({ propertyType : property.type })
                     this.setState({ price : property.price })
+                    this.setState({ downPayment : property.downPayment })
+                    this.setState({ closingCosts : property.closingCosts })
+                    this.setState({ rehabCosts : property.rehabCosts })
                     this.setState({ principle : property.principle })
-                    this.setState({ rent : property.totalRevenue })
+                    this.setState({ rent : property.rent })
+                    this.setState({ mortgage : property.mortgage })
+                    this.setState({ taxes : property.taxes })
+                    this.setState({ insurance : property.insurance })
+                    this.setState({ miscExpenses : property.miscExpenses })
                 }
             })
         }
@@ -45,7 +51,8 @@ class AddPropertyPopup extends Component {
 
     handleSave = event => {
         if(this.state.address !== '' && this.state.propertyType !== '' && this.state.price !== '' && this.state.downPayment !== '' && this.state.closingCosts !== '' && this.state.rehabCosts !== '' && this.state.principle !== '' && this.state.rent !== '' && this.state.mortgage !== '' && this.state.taxes !== '' && this.state.insurance !== '' && this.state.miscExpenses !== '') {
-            var actionType = "save"
+            var actionType = this.props.popupType
+            console.log(actionType)
             var type = this.state.propertyType
             var address = this.state.address
             var price = this.state.price

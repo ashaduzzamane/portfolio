@@ -109,7 +109,7 @@ class BankStatement extends Component {
             marginTop: 10,
             borderRadius: '20px'
         }
-        const EditBtnContainer = {
+        const BtnContainer = {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
@@ -161,7 +161,7 @@ class BankStatement extends Component {
                           );
                         })}
                         <TableCell align='left' key='edit'>
-                            <div style={EditBtnContainer}> 
+                            <div style={BtnContainer}> 
                                 <Button variant="outlined" style={EditBtnStyle} id={row.id} onClick={((e) => this.handleEdit(e, row.id))}>
                                     <Typography color="inherit">
                                         Edit
@@ -170,7 +170,7 @@ class BankStatement extends Component {
                             </div>
                         </TableCell>
                         <TableCell align='left' key='edit'>
-                            <div style={EditBtnContainer}> 
+                            <div style={BtnContainer}> 
                                 <Button variant="outlined" style={DeleteBtnStyle} id={row.id} onClick={((e) => this.handleEdit(e, row.id))}>
                                     <ClearIcon />
                                 </Button>
@@ -190,7 +190,7 @@ class BankStatement extends Component {
                         <TextField id="outlined-basic" variant="outlined" />
                     </TableCell>
                     <TableCell rowSpan={1}>
-                        <div style={EditBtnContainer}> 
+                        <div style={BtnContainer}> 
                             <Button variant="outlined" style={AddBtnStyle} >
                                 <Typography color="inherit">
                                     Add
@@ -246,7 +246,7 @@ class BankStatement extends Component {
                               );
                             })}
                             <TableCell align='left' key='edit'>
-                                <div style={EditBtnContainer}> 
+                                <div style={BtnContainer}> 
                                     <Button variant="outlined" style={EditBtnStyle} id={row.id} onClick={((e) => this.handleEdit(e, row.id))}>
                                         <Typography color="inherit">
                                             Edit
@@ -255,7 +255,7 @@ class BankStatement extends Component {
                                 </div>
                             </TableCell>
                             <TableCell align='left' key='edit'>
-                                <div style={EditBtnContainer}> 
+                                <div style={BtnContainer}> 
                                     <Button variant="outlined" style={DeleteBtnStyle} id={row.id} onClick={((e) => this.handleEdit(e, row.id))}>
                                         <ClearIcon />
                                     </Button>
@@ -275,7 +275,7 @@ class BankStatement extends Component {
                             <TextField id="outlined-basic" variant="outlined" />
                         </TableCell>
                         <TableCell rowSpan={1}>
-                            <div style={EditBtnContainer}> 
+                            <div style={BtnContainer}> 
                                 <Button variant="outlined" style={AddBtnStyle} >
                                     <Typography color="inherit">
                                         Add
@@ -300,86 +300,3 @@ class BankStatement extends Component {
 }
 
 export default BankStatement;
-
-
-
-class EditBtn extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-
-        }
-    }
-
-    render() {
-        return(
-            <Button variant="outlined">
-                <Typography color="inherit">
-                    Edit
-                </Typography>
-            </Button>
-        )
-    }
-}
-
-// export default function Bank() {
-//   const classes = useStyles();
-//   const [page, setPage] = React.useState(0);
-//   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-
-//   const handleChangePage = (event, newPage) => {
-//     setPage(newPage);
-//   };
-
-//   const handleChangeRowsPerPage = (event) => {
-//     setRowsPerPage(+event.target.value);
-//     setPage(0);
-//   };
-
-//   return (
-//     <Paper className={classes.root}>
-//       <TableContainer className={classes.container}>
-//         <Table stickyHeader aria-label="sticky table">
-//           <TableHead>
-//             <TableRow>
-//               {columns.map((column) => (
-//                 <TableCell
-//                   key={column.id}
-//                   align={column.align}
-//                   style={{ minWidth: column.minWidth }}
-//                 >
-//                   {column.label}
-//                 </TableCell>
-//               ))}
-//             </TableRow>
-//           </TableHead>
-//           <TableBody>
-//             {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-//               return (
-//                 <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-//                   {columns.map((column) => {
-//                     const value = row[column.id];
-//                     return (
-//                       <TableCell key={column.id} align={column.align}>
-//                         {column.format && typeof value === 'number' ? column.format(value) : value}
-//                       </TableCell>
-//                     );
-//                   })}
-//                 </TableRow>
-//               );
-//             })}
-//           </TableBody>
-//         </Table>
-//       </TableContainer>
-//       <TablePagination
-//         rowsPerPageOptions={[10, 25, 100]}
-//         component="div"
-//         count={rows.length}
-//         rowsPerPage={rowsPerPage}
-//         page={page}
-//         onChangePage={handleChangePage}
-//         onChangeRowsPerPage={handleChangeRowsPerPage}
-//       />
-//     </Paper>
-//   );
-// }

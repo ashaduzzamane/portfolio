@@ -27,6 +27,7 @@ class RealEstateContent extends Component {
                 //     type: 'Duplex',
                 //     address: '7911 Rue Baribeau, LaSalle, QC',
                 //     price: '500000',
+                //     
                 //     investment: '45000',
                 //     cashflow: '400',
                 //     cashOnCash: '10.4',
@@ -38,7 +39,7 @@ class RealEstateContent extends Component {
     }
 
     componentWillMount() {
-        axios.get('http://localhost:3000/v1/properties')
+        axios.get('http://localhost:3000/api/v1/properties')
         .then(response => {
             console.log(response)
             var propertyCount = 0
@@ -46,27 +47,32 @@ class RealEstateContent extends Component {
             var propertiesData = []
             for (var i=0; i<response.data.data.length; i++) {
                 var property = response.data.data[i]
-                var cashflow = parseInt(property.propertyRevenue, 10) - parseInt(property.propertyExpenses, 10)
-                var cashOnCash = ((cashflow * 12) / parseInt(property.propertyInvestment, 10)) * 100
-                var internalRate = (((parseInt(property.propertyPrinciple, 10) + cashflow) * 12) / parseInt(property.propertyInvestment, 10)) * 100
+                var investment = property.propertyDownPayment + property.propertyClosingCosts + property.propertyRehabCosts
                 propertiesData.push(
                     {
                         id: property.id,
                         propertyCount: i+1,
                         type: property.propertyType,
                         address: property.propertyAddress,
-                        price: parseInt(property.propertyCost, 10),
-                        investment: parseInt(property.propertyInvestment, 10),
-                        cashflow: cashflow,
-                        cashOnCash: cashOnCash.toFixed(2),
-                        internalRate: internalRate.toFixed(2),
-                        principle: parseInt(property.propertyPrinciple, 10)
+                        price: property.propertyPrice,
+                        downPayment: property.propertyDownPayment,
+                        closingCosts: property.propertyClosingCosts,
+                        rehabCosts: property.propertyRehabCosts,
+                        investment: investment,
+                        principle: property.propertyPrinciple,
+                        rent: property.propertyRent,
+                        mortgage: property.propertyMortgage,
+                        taxes: property.propertyTaxes,
+                        insurance: property.propertyInsurance,
+                        miscExpenses: property.propertyMiscExpenses,
+                        cashflow: property.propertyCashflow,
+                        cashOnCash: property.propertyCashOnCash,
+                        internalRate: property.propertyInternalRate
                     }
                 )
                 sqlIndex = property.id
                 propertyCount++
             }
-            console.log(sqlIndex)
             this.setState({ sqlIndex : (parseInt(sqlIndex, 10) + 1) })
             this.setState({ propertyCount : (propertyCount + 1) })
             this.setState({ propertiesData : propertiesData })
@@ -91,7 +97,7 @@ class RealEstateContent extends Component {
         this.setState({ popupType : 'EDIT' })
         this.setState({ showPopup: !this.state.showPopup }); 
     }  
-    
+
     handleClose = (
         argActionType, argType, argAddress, argPrice, 
         argDownPayment, argClosingCosts, argRehabCosts, 
@@ -99,7 +105,7 @@ class RealEstateContent extends Component {
         argMortgage, argTaxes, argInsurance, argMiscExpenses, 
         argInvestment, argCashflow, argCashOnCash, argInternalRate
         ) => {
-        if(argActionType === "save") {
+        if(argActionType === "ADD") {
             var propertiesData = this.state.propertiesData
             var index = this.state.propertyCount
             var sqlIndex = this.state.sqlIndex
@@ -113,13 +119,13 @@ class RealEstateContent extends Component {
                     downPayment: argDownPayment,
                     closingCosts: argClosingCosts,
                     rehabCosts: argRehabCosts,
+                    investment: argInvestment,
                     principle: argPrinciple,
                     rent: argRent,
                     mortgage: argMortgage,
                     taxes: argTaxes,
                     insurance: argInsurance,
                     miscExpenses: argMiscExpenses,
-                    investment: argInvestment,
                     cashflow: argCashflow,
                     cashOnCash: argCashOnCash,
                     internalRate: argInternalRate
@@ -130,17 +136,82 @@ class RealEstateContent extends Component {
             this.setState({ propertyCount : (index + 1) })
             this.setState({ sqlIndex : (sqlIndex + 1) })
 
-            axios.post('http://localhost:3000/v1/properties', {
-                "propertyType" : propertiesData[0].type,
-                "propertyAddress" : propertiesData[0].address,
-                "propertyCost" : propertiesData[0].price,
-                "propertyInvestment" : propertiesData[0].investment,
-                "propertyExpenses" : propertiesData[0].totalExpenses,
-                "propertyRevenue" : propertiesData[0].totalRevenue,
-                "propertyPrinciple" : propertiesData[0].principle
+            axios.post('http://localhost:3000/api/v1/properties', {
+                "propertyAddress" : argAddress,
+                "propertyType" : argType,
+                "propertyPrice" : argPrice,
+                "propertyDownPayment" : argDownPayment,
+                "propertyClosingCosts" : argClosingCosts,
+                "propertyRehabCosts" : argRehabCosts,
+                "propertyPrinciple" : argPrinciple,
+                "propertyRent" : argRent,
+                "propertyTotalRevenue" : argRent,
+                "propertyMortgage" : argMortgage,
+                "propertyTaxes" : argTaxes,
+                "propertyInsurance" : argInsurance,
+                "propertyMiscExpenses" : argMiscExpenses,
+                "propertyCashflow" : argCashflow,
+                "propertyCashOnCash" : argCashOnCash,
+                "propertyInternalRate" : argInternalRate
             })
             .then(response => {
                 console.log(response)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+        } else if(argActionType === "EDIT") {
+            console.log("edit")
+            var propertiesData = this.state.propertiesData
+            for (var i=0; i<propertiesData.length; i++) {
+                var property = propertiesData[i]
+                if(property.id === this.state.editID) {
+                    propertiesData[i].type = argType
+                    propertiesData[i].address = argAddress
+                    propertiesData[i].price = argPrice
+                    propertiesData[i].downPayment = argDownPayment
+                    propertiesData[i].closingCosts = argClosingCosts
+                    propertiesData[i].rehabCosts = argRehabCosts
+                    propertiesData[i].investment = argInvestment
+                    propertiesData[i].principle = argPrinciple
+                    propertiesData[i].rent = argRent
+                    propertiesData[i].mortgage = argMortgage
+                    propertiesData[i].taxes = argTaxes
+                    propertiesData[i].insurance = argInsurance
+                    propertiesData[i].miscExpenses = argMiscExpenses
+                    propertiesData[i].cashflow = argCashflow
+                    propertiesData[i].cashOnCash = argCashOnCash
+                    propertiesData[i].internalRate = argInternalRate
+                }
+            }
+
+            this.setState({ propertiesData : propertiesData })
+            this.props.onUpdateDashboardRealEstateInvestment(propertiesData)
+
+            var putURL = 'http://localhost:3000/api/v1/properties/' + this.state.editID
+            axios.put(putURL, {
+                "propertyAddress" : argAddress,
+                "propertyType" : argType,
+                "propertyPrice" : argPrice,
+                "propertyDownPayment" : argDownPayment,
+                "propertyClosingCosts" : argClosingCosts,
+                "propertyRehabCosts" : argRehabCosts,
+                "propertyPrinciple" : argPrinciple,
+                "propertyRent" : argRent,
+                "propertyTotalRevenue" : argRent,
+                "propertyMortgage" : argMortgage,
+                "propertyTaxes" : argTaxes,
+                "propertyInsurance" : argInsurance,
+                "propertyMiscExpenses" : argMiscExpenses,
+                "propertyCashflow" : argCashflow,
+                "propertyCashOnCash" : argCashOnCash,
+                "propertyInternalRate" : argInternalRate
+            })
+            .then(response => {
+                console.log(response)
+            })
+            .catch(error => {
+                console.log(error)
             })
         }
         this.togglePopup()
@@ -153,7 +224,7 @@ class RealEstateContent extends Component {
         this.setState({ propertyCount : propertyCount })
         propertiesData.forEach(property => {
             if(itemID == property.propertyCount) {
-                var deleteURL = 'http://localhost:3000/v1/properties/'+property.id.toString()
+                var deleteURL = 'http://localhost:3000/api/v1/properties/'+property.id.toString()
                 axios.delete(deleteURL)
                 .then(response => {
                     console.log(response)

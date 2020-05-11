@@ -25,7 +25,7 @@ class Analysis extends Component {
     var totalInvestment = this.props.CashflowCalculatorData.totalInvestment
     var totalExpenses = this.props.CashflowCalculatorData.totalExpenses
     var totalRevenueCashOnCash = this.props.CashflowCalculatorData.totalRevenueCashOnCash
-    var totalRevenueInternalRate = this.props.CashflowCalculatorData.totalRevenueInternalRatenpm
+    var totalRevenueInternalRate = this.props.CashflowCalculatorData.totalRevenueInternalRate
     var cashflow = 0
     var cashOnCashReturn = 0
     var internalRateOfReturn = 0
@@ -36,6 +36,7 @@ class Analysis extends Component {
       internalRateOfReturn = (((totalRevenueInternalRate - totalExpenses) * 12) / totalInvestment) * 100
       this.setState({ cashOnCashReturn : cashOnCashReturn.toFixed(1) })
       this.setState({ internalRateOfReturn : internalRateOfReturn.toFixed(1) })
+
     }
   }
 
