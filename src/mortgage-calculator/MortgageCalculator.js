@@ -55,9 +55,6 @@ export default function MortgageCalculator() {
             </Paper>
             </Grid>
         </Grid>
-        {/* <Box pt={4}>
-            <Copyright />
-        </Box> */}
         </Container>
     </main>
     )

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -11,11 +10,19 @@ import TableRow from '@material-ui/core/TableRow';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import ClearIcon from '@material-ui/icons/Clear';
+import { connect } from 'react-redux';
+
 
 class BankStatement extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            tempAssetInstitution: '',
+            tempAssetDescription: '',
+            tempAssetValue:'',
+            tempLiabilityInstitution: '',
+            tempLiabilityDescription: '',
+            tempLiabilityValue: '',
             page: 1,
             rowsPerPage: 10,
             totalAssets: 6300,
@@ -73,8 +80,105 @@ class BankStatement extends Component {
         }
     }
 
-    handleEdit  = (e, itemID) => {
+    componentDidUpdate() {
+        if(this.state.rowsAssets !== this.props.FinancialInstitutionData.rowsAssets) {
+            var totalAssets = 0
+            this.props.FinancialInstitutionData.rowsAssets.forEach(asset => {
+                totalAssets = totalAssets + asset.Value
+            })
+            this.setState({ totalAssets : totalAssets })
+            this.setState({ rowsAssets : this.props.FinancialInstitutionData.rowsAssets })
+        }
+        if(this.state.rowsLiabilities !== this.props.FinancialInstitutionData.rowsLiabilities) {
+            var totalLiabilities = 0
+            this.props.FinancialInstitutionData.rowsLiabilities.forEach(liability => {
+                totalLiabilities = totalLiabilities + liability.Value
+            })
+            this.setState({ totalLiabilities : totalLiabilities })
+            this.setState({ rowsLiabilities : this.props.FinancialInstitutionData.rowsLiabilities })
+        }
+    }
+
+    handleAssetEdit  = (e, itemID) => {
         console.log(itemID)
+    }
+
+    handleAssetDelete = (e, itemID) => {
+        var rowsAssets = this.state.rowsAssets
+        var totalAssets = 0
+        var tempRowsAssets = []
+        rowsAssets.forEach(asset => {
+            if(asset.id !== itemID) {
+                totalAssets = totalAssets + asset.Value
+                tempRowsAssets.push(asset)
+            }
+        })
+        this.setState({ totalAssets : totalAssets })
+        this.setState({ rowsAssets : tempRowsAssets })
+        this.props.onUpdateRowsAssets(tempRowsAssets)
+    }
+
+    handleLiabilityEdit  = (e, itemID) => {
+        console.log(itemID)
+    }
+
+    handleLiabilityDelete = (e, itemID) => {
+        var rowsLiabilities = this.state.rowsLiabilities
+        var totalLiabilities = 0
+        var tempRowsLiarowsLiabilities = []
+        rowsLiabilities.forEach(liability => {
+            if(liability.id !== itemID) {
+                totalLiabilities = totalLiabilities + liability.Value
+                tempRowsLiarowsLiabilities.push(liability)
+            }
+        })
+        this.setState({ totalLiabilities : totalLiabilities })
+        this.setState({ rowsLiabilities : tempRowsLiarowsLiabilities })
+        this.props.onUpdateRowsLiabilities(tempRowsLiarowsLiabilities)
+    }
+
+    handleAddAsset = event => {
+        var rowsAssets = this.state.rowsAssets
+        var totalAssets = this.state.totalAssets
+        var id = rowsAssets.length + this.state.rowsLiabilities.length + 1
+        var value = parseInt(this.state.tempAssetValue, 10)
+        totalAssets = totalAssets + value
+        rowsAssets.push(
+            {
+                'id' : id,
+                'Institution' : this.state.tempAssetInstitution,
+                'Description' : this.state.tempAssetDescription,
+                'Value' : value,
+            }
+        )
+        this.setState({ tempAssetDescription : '' })
+        this.setState({ tempAssetInstitution : '' })
+        this.setState({ tempAssetValue : '' })
+        this.setState({ rowsAssets : rowsAssets })
+        this.setState({ totalAssets : totalAssets })
+        this.props.onUpdateRowsAssets(rowsAssets)
+    }
+
+    handleAddLiability = event => {
+        var rowsLiabilities = this.state.rowsLiabilities
+        var totalLiabilities = this.state.totalLiabilities
+        var id = rowsLiabilities.length + 1
+        var value = parseInt(this.state.tempLiabilityValue, 10)
+        totalLiabilities = totalLiabilities + value
+        rowsLiabilities.push(
+            {
+                'id' : id,
+                'Institution' : this.state.tempLiabilityInstitution,
+                'Description' : this.state.tempLiabilityDescription,
+                'Value' : value,
+            }
+        )
+        this.setState({ tempLiabilityDescription : '' })
+        this.setState({ tempLiabilityInstitution : '' })
+        this.setState({ tempLiabilityValue : '' })
+        this.setState({ rowsLiabilities : rowsLiabilities })
+        this.setState({ totalLiabilities : totalLiabilities })
+        this.props.onUpdateRowsLiabilities(rowsLiabilities)
     }
 
     render() {
@@ -144,8 +248,8 @@ class BankStatement extends Component {
                         <b>{column.label}</b>
                       </TableCell>
                     ))}
-                    <TableCell key='edit' align='left' style={{ minWidth: 170 }}></TableCell>
-                    <TableCell key='delete' align='left' style={{ minWidth: 150 }}></TableCell>
+                    <TableCell key='editHeaderAsset' align='left' style={{ minWidth: 170 }}></TableCell>
+                    <TableCell key='deleteHeaderAsset' align='left' style={{ minWidth: 150 }}></TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -160,18 +264,18 @@ class BankStatement extends Component {
                             </TableCell>
                           );
                         })}
-                        <TableCell align='left' key='edit'>
+                        <TableCell align='left' key='editAsset'>
                             <div style={BtnContainer}> 
-                                <Button variant="outlined" style={EditBtnStyle} id={row.id} onClick={((e) => this.handleEdit(e, row.id))}>
+                                <Button variant="outlined" style={EditBtnStyle} id={row.id} onClick={((e) => this.handleAssetEdit(e, row.id))}>
                                     <Typography color="inherit">
                                         Edit
                                     </Typography>
                                 </Button>
                             </div>
                         </TableCell>
-                        <TableCell align='left' key='edit'>
+                        <TableCell align='left' key='deleteAsset'>
                             <div style={BtnContainer}> 
-                                <Button variant="outlined" style={DeleteBtnStyle} id={row.id} onClick={((e) => this.handleEdit(e, row.id))}>
+                                <Button variant="outlined" style={DeleteBtnStyle} id={row.id} onClick={((e) => this.handleAssetDelete(e, row.id))}>
                                     <ClearIcon />
                                 </Button>
                             </div>
@@ -181,17 +285,40 @@ class BankStatement extends Component {
                 })}
                 <TableRow>
                     <TableCell rowSpan={1}>
-                        <TextField id="outlined-basic" variant="outlined" />
+                        <TextField 
+                            value={this.state.tempAssetInstitution}
+                            id="outlined-basic" 
+                            variant="outlined" 
+                            onChange = {(event) => { 
+                                this.setState({ tempAssetInstitution : event.target.value })
+                            }}
+                        />
                     </TableCell>
                     <TableCell rowSpan={1}>
-                        <TextField id="outlined-basic" variant="outlined" />    
+                        <TextField 
+                            value={this.state.tempAssetDescription}
+                            id="outlined-basic" 
+                            variant="outlined" 
+                            onChange = {(event) => { 
+                                this.setState({ tempAssetDescription : event.target.value })
+                            }}
+                        />    
                     </TableCell>
                     <TableCell rowSpan={1}>
-                        <TextField id="outlined-basic" variant="outlined" />
+                        <TextField 
+                            value={this.state.tempAssetValue}
+                            id="outlined-basic" 
+                            variant="outlined" 
+                            onChange = {(event) => { 
+                                if(!isNaN(event.target.value)) {
+                                    this.setState({ tempAssetValue : event.target.value })
+                                }
+                            }}
+                        />
                     </TableCell>
                     <TableCell rowSpan={1}>
                         <div style={BtnContainer}> 
-                            <Button variant="outlined" style={AddBtnStyle} >
+                            <Button variant="outlined" style={AddBtnStyle} onClick={this.handleAddAsset}>
                                 <Typography color="inherit">
                                     Add
                                 </Typography>
@@ -229,8 +356,8 @@ class BankStatement extends Component {
                             <b>{column.label}</b>
                           </TableCell>
                         ))}
-                        <TableCell key='edit' align='left' style={{ minWidth: 170 }}></TableCell>
-                        <TableCell key='delete' align='left' style={{ minWidth: 170 }}></TableCell>
+                        <TableCell key='editHeaderLiability' align='left' style={{ minWidth: 170 }}></TableCell>
+                        <TableCell key='deleteHeaderLiability' align='left' style={{ minWidth: 170 }}></TableCell>
                     </TableRow>
                     </TableHead>
                     <TableBody>
@@ -245,18 +372,18 @@ class BankStatement extends Component {
                                 </TableCell>
                               );
                             })}
-                            <TableCell align='left' key='edit'>
+                            <TableCell align='left' key='editLiability'>
                                 <div style={BtnContainer}> 
-                                    <Button variant="outlined" style={EditBtnStyle} id={row.id} onClick={((e) => this.handleEdit(e, row.id))}>
+                                    <Button variant="outlined" style={EditBtnStyle} id={row.id} onClick={((e) => this.handleLiabilityEdit(e, row.id))}>
                                         <Typography color="inherit">
                                             Edit
                                         </Typography>
                                     </Button>
                                 </div>
                             </TableCell>
-                            <TableCell align='left' key='edit'>
+                            <TableCell align='left' key='deleteLiability'>
                                 <div style={BtnContainer}> 
-                                    <Button variant="outlined" style={DeleteBtnStyle} id={row.id} onClick={((e) => this.handleEdit(e, row.id))}>
+                                    <Button variant="outlined" style={DeleteBtnStyle} id={row.id} onClick={((e) => this.handleLiabilityDelete(e, row.id))}>
                                         <ClearIcon />
                                     </Button>
                                 </div>
@@ -266,17 +393,40 @@ class BankStatement extends Component {
                       })}
                     <TableRow>
                         <TableCell rowSpan={1}>
-                            <TextField id="outlined-basic" variant="outlined" />
+                            <TextField 
+                                value={this.state.tempLiabilityInstitution}
+                                id="outlined-basic" 
+                                variant="outlined" 
+                                onChange = {(event) => { 
+                                    this.setState({ tempLiabilityInstitution : event.target.value })
+                                }}
+                            />
                         </TableCell>
                         <TableCell rowSpan={1}>
-                            <TextField id="outlined-basic" variant="outlined" />    
+                            <TextField 
+                                value={this.state.tempLiabilityDescription}
+                                id="outlined-basic" 
+                                variant="outlined"
+                                onChange = {(event) => { 
+                                    this.setState({ tempLiabilityDescription : event.target.value })
+                                }} 
+                            />    
                         </TableCell>
                         <TableCell rowSpan={1}>
-                            <TextField id="outlined-basic" variant="outlined" />
+                            <TextField 
+                                value={this.state.tempLiabilityValue}
+                                id="outlined-basic" 
+                                variant="outlined" 
+                                onChange = {(event) => { 
+                                    if(!isNaN(event.target.value)) {
+                                        this.setState({ tempLiabilityValue : event.target.value })
+                                    }
+                                }}
+                            />
                         </TableCell>
                         <TableCell rowSpan={1}>
                             <div style={BtnContainer}> 
-                                <Button variant="outlined" style={AddBtnStyle} >
+                                <Button variant="outlined" style={AddBtnStyle} onClick={this.handleAddLiability}>
                                     <Typography color="inherit">
                                         Add
                                     </Typography>
@@ -299,4 +449,23 @@ class BankStatement extends Component {
     }
 }
 
-export default BankStatement;
+const mapDispatchToProps = dispatch => {
+    return {
+        onUpdateRowsAssets : (argRowsAssets) => dispatch({
+            type: "UPDATE_ASSETS",
+            rowsAssets : argRowsAssets
+        }),
+        onUpdateRowsLiabilities : (argRowsLiabilities) => dispatch({
+            type: "UPDATE_LIABILITIES",
+            rowsLiabilities : argRowsLiabilities
+        })
+    };
+}
+
+function mapStateToProps(state) {
+    return {
+        FinancialInstitutionData : state.FinancialInstitutionData
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(BankStatement);
