@@ -8,7 +8,7 @@ class Projection extends Component {
         super(props);
         this.state = {
             values: {
-                labels: [2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027],
+                labels: [2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2029],
                 datasets: [
                     {
                         label: 'Stock',
@@ -29,11 +29,36 @@ class Projection extends Component {
                         pointHoverBorderWidth: 2,
                         pointRadius: 1,
                         pointHitRadius: 10,
-                        data: [80000, 85000, 91000, 98000, 108000, 118000, 129000, 140000]
+                        data: [80000, 85000, 91000, 98000, 108000, 118000, 129000, 140000, 118000, 129000, 140000]
                     }
                 ]
             },
         }
+    }
+
+    componentDidUpdate() {
+        this.getData()
+    }
+
+    getData() {
+        var values = this.state.values
+        var currentYear = (new Date()).getFullYear()
+        var labels = []
+        for (var i=0; i<10; i++) {
+            labels.push(currentYear)
+            currentYear++
+        }
+        var totalPrinciple = this.props.totalPrinciple
+        var currentNetWorth = this.props.netWorth
+        var cashflow = this.props.totalRevenue - this.props.totalExpenses
+        var data = []
+        for (var j=0; j<10; j++) {
+            data.push(currentNetWorth)
+            currentNetWorth = currentNetWorth + cashflow + totalPrinciple 
+        }
+        values.labels = labels
+        values.datasets[0].data = data
+        return values
     }
 
     render() {

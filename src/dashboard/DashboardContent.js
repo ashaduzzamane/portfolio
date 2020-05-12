@@ -16,6 +16,7 @@ class DashboardContent extends Component {
             netWorth: 0,
             totalRevenue: 0,
             totalExpenses: 0,
+            totalPrinciple: 0,
             properties : [],
             financialAssets : [],
             financialLiabilities : [],
@@ -34,13 +35,15 @@ class DashboardContent extends Component {
         var totalLiabilities = 0
         var totalRevenue = 0
         var totalExpenses = 0
+        var totalPrinciple = 0
 
         axios.get("http://localhost:3000/api/v1/properties")
         .then(response => {
             response.data.data.forEach(property => {
                 console.log(property)
                 totalAssets = totalAssets + property.propertyPrice
-                totalLiabilities = totalLiabilities + (property.propertyPrice = property.propertyDownPayment)
+                totalLiabilities = totalLiabilities + (property.propertyPrice - property.propertyDownPayment)
+                totalPrinciple = totalPrinciple + property.propertyPrinciple
                 investment['Real Estate'] = investment['Real Estate'] + property.propertyDownPayment + property.propertyClosingCosts + property.propertyRehabCosts
                 totalRevenue = totalRevenue + property.propertyRent
                 totalExpenses = totalExpenses + property.propertyMortgage + property.propertyInsurance + property.propertyTaxes + property.propertyMiscExpenses
