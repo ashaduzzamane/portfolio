@@ -32,7 +32,14 @@ class Investment extends Component {
     }
 
     componentWillMount() {
-        console.log(this.props.investment.cash)
+        console.log(Object.values(this.props.investment))
+    }
+
+    getData() {
+        var chartData = this.state.chartData
+        chartData.labels = Object.keys(this.props.investment)
+        chartData.datasets[0].data = Object.values(this.props.investment)
+        return chartData
     }
 
     render() {
@@ -46,7 +53,7 @@ class Investment extends Component {
         return(
             <Paper style={paperStylePie}>
                 <Pie
-                    data={this.state.chartData}
+                    data={this.getData()}
                     options={{
                         title:{
                             display:true,

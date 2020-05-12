@@ -623,50 +623,6 @@ class BankStatement extends Component {
                             <TableCell></TableCell>
                         </TableRow>
                 }
-                {/* <TableRow>
-                    <TableCell rowSpan={1}>
-                        <TextField 
-                            value={this.state.tempAssetInstitution}
-                            id="outlined-basic" 
-                            variant="outlined" 
-                            onChange = {(event) => { 
-                                this.setState({ tempAssetInstitution : event.target.value })
-                            }}
-                        />
-                    </TableCell>
-                    <TableCell rowSpan={1}>
-                        <TextField 
-                            value={this.state.tempAssetDescription}
-                            id="outlined-basic" 
-                            variant="outlined" 
-                            onChange = {(event) => { 
-                                this.setState({ tempAssetDescription : event.target.value })
-                            }}
-                        />    
-                    </TableCell>
-                    <TableCell rowSpan={1}>
-                        <TextField 
-                            value={this.state.tempAssetValue}
-                            id="outlined-basic" 
-                            variant="outlined" 
-                            onChange = {(event) => { 
-                                if(!isNaN(event.target.value)) {
-                                    this.setState({ tempAssetValue : event.target.value })
-                                }
-                            }}
-                        />
-                    </TableCell>
-                    <TableCell rowSpan={1}>
-                        <div style={BtnContainer}> 
-                            <Button variant="outlined" style={AddBtnStyle} onClick={this.handleAddAsset}>
-                                <Typography color="inherit">
-                                    Add
-                                </Typography>
-                            </Button>
-                        </div>
-                    </TableCell>
-                    <TableCell></TableCell>
-                </TableRow> */}
                     <TableRow>
                         <TableCell rowSpan={2} />
                         <TableCell align="left" colSpan={1}><b>Total Assets</b></TableCell>
@@ -830,50 +786,6 @@ class BankStatement extends Component {
                         <TableCell></TableCell>
                     </TableRow>
                 }
-                    {/* <TableRow>
-                        <TableCell rowSpan={1}>
-                            <TextField 
-                                value={this.state.tempLiabilityInstitution}
-                                id="outlined-basic" 
-                                variant="outlined" 
-                                onChange = {(event) => { 
-                                    this.setState({ tempLiabilityInstitution : event.target.value })
-                                }}
-                            />
-                        </TableCell>
-                        <TableCell rowSpan={1}>
-                            <TextField 
-                                value={this.state.tempLiabilityDescription}
-                                id="outlined-basic" 
-                                variant="outlined"
-                                onChange = {(event) => { 
-                                    this.setState({ tempLiabilityDescription : event.target.value })
-                                }} 
-                            />    
-                        </TableCell>
-                        <TableCell rowSpan={1}>
-                            <TextField 
-                                value={this.state.tempLiabilityValue}
-                                id="outlined-basic" 
-                                variant="outlined" 
-                                onChange = {(event) => { 
-                                    if(!isNaN(event.target.value)) {
-                                        this.setState({ tempLiabilityValue : event.target.value })
-                                    }
-                                }}
-                            />
-                        </TableCell>
-                        <TableCell rowSpan={1}>
-                            <div style={BtnContainer}> 
-                                <Button variant="outlined" style={AddBtnStyle} onClick={this.handleAddLiability}>
-                                    <Typography color="inherit">
-                                        Add
-                                    </Typography>
-                                </Button>
-                            </div>
-                        </TableCell>
-                        <TableCell></TableCell>
-                    </TableRow> */}
                     <TableRow>
                         <TableCell rowSpan={2} />
                         <TableCell align="left" colSpan={1}><b>Total Liabilities</b></TableCell>

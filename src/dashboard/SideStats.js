@@ -12,6 +12,12 @@ class SideStats extends Component {
         }
     }
 
+    componentWillMount() {
+        this.setState({ netWorth : this.props.netWorth })
+        this.setState({ totalAssets : this.props.totalAssets })
+        this.setState({ totalLiabilities : this.props.totalLiabilities })
+    }
+
     render() {
         const sideStatsStyle = {
             display: 'flex',

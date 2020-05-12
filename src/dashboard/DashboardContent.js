@@ -11,26 +11,56 @@ class DashboardContent extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            totalAssets: 0,
+            totalLiabilities: 0,
+            netWorth: 0,
+            properties : [],
+            financialAssets : [],
+            financialLiabilities : [],
             investment: {
-                realEstate: 0,
-                stocks: 0,
-                cash: 0
+                "Real Estate" : 0
             }
         }
     }
 
     componentWillMount() {
-        // var realEstateInvestments = 0
-        // var realEstateAssets = 0
-        // this.props.RealEstateData.propertiesList.forEach(property => {
-        //     realEstateInvestments = realEstateInvestments + parseInt(property.investment, 10)
-        //     realEstateAssets = realEstateAssets + parseInt(property.price, 10)
-        // })
-        // var investment  = this.state.investment
-        // investment.realEstate = realEstateInvestments
-        // this.setState({ investment : investment })
+        var properties = this.props.RealEstateData.propertiesList
+        var financialAssets = this.props.FinancialInstitutionData.rowsAssets
+        var financialLiabilities = this.props.FinancialInstitutionData.rowsLiabilities
+        var investment = this.state.investment
+        var totalAssets = 0
+        var totalLiabilities = 0
+        properties.forEach(property => {
+            totalAssets = totalAssets + property.price
+            totalLiabilities = totalLiabilities + (property.price - property.downPayment)
+            investment['Real Estate'] = investment['Real Estate'] + property.investment
+        })
+        financialAssets.forEach(financial => {
+            totalAssets = totalAssets + financial.Value
+            if( !(Object.keys(investment).includes(financial.Description)) ) {
+                investment[`${financial.Description}`] = financial.Value
+            } else {
+                investment[`${financial.Description}`] = investment[`${financial.Description}`] + financial.Value
+            }
+        })
+        financialLiabilities.forEach(financial => {
+            totalLiabilities = totalLiabilities + financial.Value
+        })
+        var netWorth = totalAssets - totalLiabilities
+        this.setState({ netWorth : netWorth })
+        this.setState({ investment : investment })
+        this.setState({ totalAssets : totalAssets })
+        this.setState({ totalLiabilities : totalLiabilities })
 
-        axios.get("http://localhost:3000/v1/properties")
+        axios.get("http://localhost:3000/api/v1/properties")
+        .then(response => {
+            console.log(response)
+        })
+        .catch(error => {
+            console.log(error)
+        })
+
+        axios.get("http://localhost:3000/api/v1/financials")
         .then(response => {
             console.log(response)
         })
@@ -62,7 +92,8 @@ class DashboardContent extends Component {
 
 function mapStateToProps(state) {
     return {
-        RealEstateData : state.RealEstateData
+        RealEstateData : state.RealEstateData,
+        FinancialInstitutionData : state.FinancialInstitutionData
     };
 }
 
