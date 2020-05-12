@@ -12,6 +12,7 @@ import TextField from '@material-ui/core/TextField';
 import ClearIcon from '@material-ui/icons/Clear';
 import { connect } from 'react-redux';
 import EditFinancialPopup from './EditFinancialPopup'
+import axios from 'axios'
 
 
 class BankStatement extends Component {
@@ -29,8 +30,8 @@ class BankStatement extends Component {
             tempLiabilityValue: '',
             page: 1,
             rowsPerPage: 10,
-            totalAssets: 6300,
-            totalLiabilities: 22400,
+            totalAssets: 0,
+            totalLiabilities: 0,
             tempRowsAssets: [],
             tempRowsLiabilities: [],
             columns : [
@@ -50,24 +51,7 @@ class BankStatement extends Component {
                 },
             ],
             rowsAssets : [
-                {
-                    'id' : 1,
-                    'Institution' : 'CIBC',
-                    'Description' : 'Checking Account',
-                    'Value' : 1200,
-                },
-                {
-                    'id' : 2,
-                    'Institution' : 'Wealthsimple',
-                    'Description' : 'TFSA',
-                    'Value' : 3600,
-                },
-                {
-                    'id' : 3,
-                    'Institution' : 'Wealthsimple Trade',
-                    'Description' : 'TFSA',
-                    'Value' : 1500,
-                },
+
             ],
             rowsLiabilities : [
                 {
@@ -84,6 +68,53 @@ class BankStatement extends Component {
                 },
             ]
         }
+    }
+
+    componentWillMount() {
+        axios.get('http://localhost:3000/api/v1/financials')
+        .then(response => {
+            var rowsAssets = []
+            var totalAssets = 0
+            var rowsLiabilities = []
+            var totalLiabilities = 0
+            response.data.data.forEach(financial => {
+                if(financial.accountType === "Asset") {
+                    rowsAssets.push({
+                        'id' : financial.id,
+                        'Institution' : financial.accountInstitution,
+                        'Description' : financial.accountDescription,
+                        'Value' : financial.accountValue
+                    })
+                    totalAssets = totalAssets + financial.accountValue
+                } else if(financial.accountType === 'Liability') {
+                    rowsLiabilities.push({
+                        'id' : financial.id,
+                        'Institution' : financial.accountInstitution,
+                        'Description' : financial.accountDescription,
+                        'Value' : financial.accountValue
+                    })
+                    totalLiabilities = totalLiabilities + financial.accountValue
+                }
+            })
+            this.props.onUpdateRowsAssets(rowsAssets)
+            this.setState({ rowsAssets : rowsAssets })
+            this.setState({ totalAssets : totalAssets })
+            this.props.onUpdateRowsLiabilities(rowsLiabilities)
+            this.setState({ rowsLiabilities : rowsLiabilities })
+            this.setState({ totalLiabilities : totalLiabilities })
+        })
+        .catch(error => {
+            var totalAssets = 0
+            var totalLiabilities = 0
+            this.props.FinancialInstitutionData.rowsAssets.forEach(financial => {
+                totalAssets = totalAssets + financial.accountValue
+            })
+            this.props.FinancialInstitutionData.rowsLiabilities.forEach(financial => {
+                totalLiabilities = totalLiabilities + financial.accountValue
+            })
+            this.setState({ rowsAssets : this.props.FinancialInstitutionData.rowsAssets })
+            this.setState({ rowsLiabilities : this.props.FinancialInstitutionData.rowsLiabilities })
+        })
     }
 
     componentDidUpdate() {
@@ -152,7 +183,19 @@ class BankStatement extends Component {
                 }
             )
         }
-        console.log(tempRowsAssets)
+        var putURL = 'http://localhost:3000/api/v1/financials/' + this.state.tempID.toString()
+        axios.put(putURL, {
+            "accountType" : "Asset",
+            "accountInstitution" : this.state.tempAssetInstitution,
+            "accountDescription" : this.state.tempAssetDescription,
+            "accountValue" : parseInt(this.state.tempAssetValue, 10)
+        })
+        .then(response => {
+            console.log(response)
+        })
+        .catch(error => {
+            console.log(error)
+        })
         this.setState({ tempAssetInstitution : '' })
         this.setState({ tempAssetDescription : '' })
         this.setState({ tempAssetValue : '' })
@@ -205,6 +248,19 @@ class BankStatement extends Component {
                 }
             )
         }
+        var putURL = 'http://localhost:3000/api/v1/financials/' + this.state.tempID.toString()
+        axios.put(putURL, {
+            "accountType" : "Liability",
+            "accountInstitution" : this.state.tempAssetInstitution,
+            "accountDescription" : this.state.tempAssetDescription,
+            "accountValue" : parseInt(this.state.tempAssetValue, 10)
+        })
+        .then(response => {
+            console.log(response)
+        })
+        .catch(error => {
+            console.log(error)
+        })
         this.setState({ tempLiabilityInstitution : '' })
         this.setState({ tempLiabilityDescription : '' })
         this.setState({ tempLiabilityValue : '' })
@@ -288,20 +344,33 @@ class BankStatement extends Component {
         var id = rowsAssets.length + this.state.rowsLiabilities.length + 1
         var value = parseInt(this.state.tempAssetValue, 10)
         totalAssets = totalAssets + value
-        rowsAssets.push(
-            {
-                'id' : id,
-                'Institution' : this.state.tempAssetInstitution,
-                'Description' : this.state.tempAssetDescription,
-                'Value' : value,
-            }
-        )
-        this.setState({ tempAssetDescription : '' })
-        this.setState({ tempAssetInstitution : '' })
-        this.setState({ tempAssetValue : '' })
-        this.setState({ rowsAssets : rowsAssets })
-        this.setState({ totalAssets : totalAssets })
-        this.props.onUpdateRowsAssets(rowsAssets)
+        axios.post('http://localhost:3000/api/v1/financials', {
+            "accountType" : "Asset",
+            "accountInstitution" : this.state.tempAssetInstitution,
+            "accountDescription" : this.state.tempAssetDescription,
+            "accountValue" : value
+        })
+        .then(response => {
+            id = response.data.data.id
+            console.log('start')
+            rowsAssets.push(
+                {
+                    'id' : id,
+                    'Institution' : this.state.tempAssetInstitution,
+                    'Description' : this.state.tempAssetDescription,
+                    'Value' : value,
+                }
+            )
+            this.setState({ rowsAssets : rowsAssets })
+            this.props.onUpdateRowsAssets(rowsAssets)
+            this.setState({ tempAssetDescription : '' })
+            this.setState({ tempAssetInstitution : '' })
+            this.setState({ tempAssetValue : '' })
+            this.setState({ totalAssets : totalAssets })
+        })
+        .catch(error => {
+            console.log(error)
+        })
     }
 
     handleAddLiability = event => {
@@ -310,20 +379,32 @@ class BankStatement extends Component {
         var id = rowsLiabilities.length + 1
         var value = parseInt(this.state.tempLiabilityValue, 10)
         totalLiabilities = totalLiabilities + value
-        rowsLiabilities.push(
-            {
-                'id' : id,
-                'Institution' : this.state.tempLiabilityInstitution,
-                'Description' : this.state.tempLiabilityDescription,
-                'Value' : value,
-            }
-        )
-        this.setState({ tempLiabilityDescription : '' })
-        this.setState({ tempLiabilityInstitution : '' })
-        this.setState({ tempLiabilityValue : '' })
-        this.setState({ rowsLiabilities : rowsLiabilities })
-        this.setState({ totalLiabilities : totalLiabilities })
-        this.props.onUpdateRowsLiabilities(rowsLiabilities)
+        axios.post('http://localhost:3000/api/v1/financials', {
+            "accountType" : "Liability",
+            "accountInstitution" : this.state.tempLiabilityInstitution,
+            "accountDescription" : this.state.tempLiabilityDescription,
+            "accountValue" : value
+        })
+        .then(response => {
+            id = response.data.data.id
+            rowsLiabilities.push(
+                {
+                    'id' : id,
+                    'Institution' : this.state.tempLiabilityInstitution,
+                    'Description' : this.state.tempLiabilityDescription,
+                    'Value' : value,
+                }
+            )
+            this.setState({ rowsLiabilities : rowsLiabilities })
+            this.props.onUpdateRowsLiabilities(rowsLiabilities)
+            this.setState({ totalLiabilities : totalLiabilities })
+            this.setState({ tempLiabilityDescription : '' })
+            this.setState({ tempLiabilityInstitution : '' })
+            this.setState({ tempLiabilityValue : '' })
+        })
+        .catch(error => {
+            console.log(error)
+        })
     }
 
     render() {
