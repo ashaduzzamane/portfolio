@@ -299,6 +299,14 @@ class BankStatement extends Component {
                 tempRowsAssets.push(asset)
             }
         })
+        var deleteURL = 'http://localhost:3000/api/v1/financials/' + itemID.toString()
+        axios.delete(deleteURL)
+        .then(response => {
+            console.log(response)
+        })
+        .catch(error => {
+            console.log(error)
+        })
         this.setState({ totalAssets : totalAssets })
         this.setState({ rowsAssets : tempRowsAssets })
         this.props.onUpdateRowsAssets(tempRowsAssets)
@@ -332,6 +340,14 @@ class BankStatement extends Component {
                 totalLiabilities = totalLiabilities + liability.Value
                 tempRowsLiabilities.push(liability)
             }
+        })
+        var deleteURL = 'http://localhost:3000/api/v1/financials/' + itemID.toString()
+        axios.delete(deleteURL)
+        .then(response => {
+            console.log(response)
+        })
+        .catch(error => {
+            console.log(error)
         })
         this.setState({ totalLiabilities : totalLiabilities })
         this.setState({ rowsLiabilities : tempRowsLiabilities })
