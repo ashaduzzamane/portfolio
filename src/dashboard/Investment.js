@@ -7,6 +7,7 @@ class Investment extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            investment: {},
             chartData:{
                 labels: [
                     'Real Estate', 
@@ -32,7 +33,15 @@ class Investment extends Component {
     }
 
     componentWillMount() {
-        console.log(Object.values(this.props.investment))
+        this.setState({ investment : this.props.investment })
+    }
+
+    componentDidUpdate(){
+        if(this.state.investment !== this.props.investment) {
+            this.setState({ investment : this.props.investment })
+            this.getData()
+            console.log("done")
+        }
     }
 
     getData() {

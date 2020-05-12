@@ -13,9 +13,19 @@ class SideStats extends Component {
     }
 
     componentWillMount() {
+        console.log(this.props.netWorth, this.props.totalAssets, this.props.totalLiabilities)
         this.setState({ netWorth : this.props.netWorth })
         this.setState({ totalAssets : this.props.totalAssets })
         this.setState({ totalLiabilities : this.props.totalLiabilities })
+    }
+
+    componentDidUpdate() {
+        if(this.state.netWorth !== this.props.netWorth || this.state.totalAssets !== this.props.totalAssets || this.state.totalLiabilities !== this.props.totalLiabilities) {
+            console.log(this.props.netWorth, this.props.totalAssets, this.props.totalLiabilities)
+            this.setState({ netWorth : this.props.netWorth })
+            this.setState({ totalAssets : this.props.totalAssets })
+            this.setState({ totalLiabilities : this.props.totalLiabilities })
+        }
     }
 
     render() {
