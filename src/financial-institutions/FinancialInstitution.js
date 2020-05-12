@@ -32,7 +32,7 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-export default function Loans() {
+export default function FinancialInstitution() {
     const classes = useStyles();
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 

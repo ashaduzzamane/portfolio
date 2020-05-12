@@ -9,26 +9,17 @@ import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
-import Badge from '@material-ui/core/Badge';
-import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Dashboard from './dashboard/Dashboard'
 import Stocks from './stocks/Stocks'
 import RealEstate from './real-estate/RealEstate'
-import Loans from './loans/Loans'
+import FinancialInstitution from './financial-institutions/FinancialInstitution'
 import MortgageCalculator from './mortgage-calculator/MortgageCalculator'
 import CashflowCalculator from './cashflow-calculator/CashflowCalculator'
 import { mainListItems, secondaryListItems } from './listItems';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import './css/LandingPage.css';
-// import NotificationsIcon from '@material-ui/icons/Notifications';
-// import Chart from './Chart';
-// import Deposits from './Deposits';
-// import Orders from './Orders';
 
 const drawerWidth = 240;
 
@@ -169,11 +160,6 @@ export default function LandingPage() {
                     </Typography>
                 </Route>
             </Switch>
-            {/* <IconButton color="inherit">
-                <Badge badgeContent={4} color="secondary">
-                <NotificationsIcon />
-                </Badge>
-            </IconButton> */}
             </Toolbar>
         </AppBar>
         <Drawer
@@ -200,7 +186,7 @@ export default function LandingPage() {
           <Route exact path={[ "/" ]} render={props => <Dashboard {...props} refreshRoute={[ "/" ]} /> } />
           <Route exact path={"/stocks"} render={props => <Stocks {...props} refreshRoute={"/stocks"} /> } />
           <Route exact path={"/real-estate"} render={props => <RealEstate {...props} refreshRoute={"/real-estate"} /> } />
-          <Route exact path={"/financial-institution"} render={props => <Loans {...props} refreshRoute={"/financial-institution"} /> } />
+          <Route exact path={"/financial-institution"} render={props => <FinancialInstitution {...props} refreshRoute={"/financial-institution"} /> } />
           <Route exact path={"/mortgage-calculator"} render={props => <MortgageCalculator {...props} refreshRoute={"/mortgage-calculator"} /> } />
           <Route exact path={"/cashflow-calculator"} render={props => <CashflowCalculator {...props} refreshRoute={"/cashflow-calculator"} /> } />
         </Switch>
