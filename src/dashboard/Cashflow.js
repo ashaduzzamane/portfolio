@@ -7,6 +7,7 @@ class Cashflow extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            tempData: [],
             chartData:{
                 labels: [
                     'Revenue', 
@@ -14,7 +15,7 @@ class Cashflow extends Component {
                 ],
                 datasets:[
                   {
-                    label:'Population',
+                    label:'Amount',
                     data:[
                       7500,
                       4900,
@@ -29,6 +30,20 @@ class Cashflow extends Component {
         }
     }
 
+    componentWillMount(){
+        this.getData()
+    }
+
+    componentDidUpdate() {
+        this.getData()
+    }
+
+    getData() {
+        var chartData = this.state.chartData
+        chartData.datasets[0].data = [this.props.totalRevenue, this.props.totalExpenses]
+        return chartData
+    }
+
     render() {
         const paperStyleBar = {
             height: 340,
@@ -41,7 +56,7 @@ class Cashflow extends Component {
             <Paper style={paperStyleBar}>
                 <div>
                     <HorizontalBar
-                        data={this.state.chartData}
+                        data={this.getData()}
                         options={{
                             title:{
                                 display:true,
