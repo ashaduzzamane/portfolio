@@ -11,7 +11,6 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import ClearIcon from '@material-ui/icons/Clear';
 import { connect } from 'react-redux';
-import EditFinancialPopup from './EditFinancialPopup'
 import axios from 'axios'
 
 
