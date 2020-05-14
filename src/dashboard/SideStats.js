@@ -29,11 +29,6 @@ class SideStats extends Component {
     }
 
     render() {
-        const sideStatsStyle = {
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-around'
-        }
         const cardStyle = {
             backgroundColor: '#f0f0f0',
             color : '#364059',
@@ -46,13 +41,10 @@ class SideStats extends Component {
         }
 
         return(
-            <div style={sideStatsStyle}>
-                <Card style={cardStyleMain} className='stockCardSideStats'>
+            <div className='rootStatsStyle'>
+                <Card style={cardStyleMain} id='stockCardSideStats'>
                     <CardContent>
-                        <Grid
-                        container
-                        justify="space-between"
-                        >
+                        <Grid container justify="space-between">
                             <Grid item>
                                 <Typography
                                 className='AnalysisTitle'
@@ -72,12 +64,9 @@ class SideStats extends Component {
                         </Grid>
                     </CardContent>
                 </Card>
-                <Card style={cardStyle} className='stockCardSideStats'>
+                <Card style={cardStyle} id='stockCardSideStats'>
                     <CardContent>
-                        <Grid
-                        container
-                        justify="space-between"
-                        >
+                        <Grid container justify="space-between">
                             <Grid item>
                                 <Typography
                                 className='AnalysisTitle'
@@ -97,7 +86,7 @@ class SideStats extends Component {
                         </Grid>
                     </CardContent>
                 </Card>
-                <Card style={cardStyle} className='stockCardSideStats'>
+                <Card style={cardStyle} id='stockCardSideStats'>
                     <CardContent>
                         <Grid
                         container

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Line, Doughnut, Pie, Bar, HorizontalBar } from 'react-chartjs-2'
 import Paper from '@material-ui/core/Paper';
-import '../css/Stock.css'
+import '../css/Dashboard.css'
 
 class Investment extends Component {
     constructor(props) {
@@ -60,7 +60,10 @@ class Investment extends Component {
         }
 
         return(
-            <Paper style={paperStylePie}>
+            <Paper
+                // style={paperStylePie}
+                className='paperStylePie'    
+            >
                 <Pie
                     data={this.getData()}
                     options={{

@@ -26,9 +26,11 @@
     display: flex;
     justify-content: space-around;
     margin-top: 20px;
+    margin-bottom: 20px;
     flex-wrap: wrap;
     align-items: center;
 }
+
 .Analysis {
     width: 100%
 }

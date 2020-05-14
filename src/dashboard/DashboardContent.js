@@ -5,7 +5,7 @@ import Cashflow from './Cashflow'
 import Investment from './Investment'
 import { connect } from 'react-redux';
 import axios from 'axios'
-import '../css/Stock.css'
+import '../css/Dashboard.css'
 
 class DashboardContent extends Component {
     constructor(props) {
@@ -115,18 +115,13 @@ class DashboardContent extends Component {
     }
 
     render() {
-        const topContentStyle = {
-            display: 'flex',
-            justifyContent: 'space-between'
-        }
-
         return(
             <div>
-                <div style={topContentStyle}>
+                <div className='contentStyleTop'>
                     <Projection {...this.state} />
                     <SideStats {...this.state} />
                 </div>
-                <div style={topContentStyle}>
+                <div className='contentStyleBottom'>
                     <Cashflow {...this.state} />
                     <Investment {...this.state} />
                 </div>

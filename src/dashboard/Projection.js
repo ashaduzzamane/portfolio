@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Line, Doughnut, Pie, Bar, HorizontalBar } from 'react-chartjs-2'
 import Paper from '@material-ui/core/Paper';
-import '../css/Stock.css'
+// import '../css/Stock.css'
+import '../css/Dashboard.css'
 
 class Projection extends Component {
     constructor(props) {
@@ -11,7 +12,7 @@ class Projection extends Component {
                 labels: [2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2029],
                 datasets: [
                     {
-                        label: 'Stock',
+                        label: 'Net Worth',
                         fill: true,
                         lineTension: 0,
                         backgroundColor: '#364059',
@@ -70,7 +71,10 @@ class Projection extends Component {
         }
 
         return(
-            <Paper style={paperStyle}>
+            <Paper 
+                // style={paperStyle}
+                className='paperStyleLine'
+            >
                 <div>
                     <Line 
                         data={this.state.values}
