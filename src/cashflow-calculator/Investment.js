@@ -42,6 +42,7 @@ class Investment extends Component {
         }
         var totalInvestment = downPaymentAmount + closingCostsAmount + rehabCostsAmount
         this.setState({ totalInvestment : totalInvestment })
+        this.props.onUpdateInvestment(totalInvestment)
     }
 
     handleChangeClosingCosts = event => {

@@ -23,6 +23,7 @@ class Analysis extends Component {
 
   handleClick = event => {
     var totalInvestment = this.props.CashflowCalculatorData.totalInvestment
+    console.log(totalInvestment)
     var totalExpenses = this.props.CashflowCalculatorData.totalExpenses
     var totalRevenueCashOnCash = this.props.CashflowCalculatorData.totalRevenueCashOnCash
     var totalRevenueInternalRate = this.props.CashflowCalculatorData.totalRevenueInternalRate
