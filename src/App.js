@@ -4,7 +4,7 @@ import LandingPage from './LandingPage';
 
 
 export default App =>(
-  <BrowserRouter>
+  <BrowserRouter basename={process.env.PUBLIC_URL}>
     <Switch>
       <Route exact path={["/"]} render={props => <LandingPage {...props} refreshRoute={"/"} /> } />
       <Route exact path={["/stocks"]} render={props => <LandingPage {...props} refreshRoute={"/stocks"} /> } />

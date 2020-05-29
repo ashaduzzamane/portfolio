@@ -114,7 +114,7 @@ export default function LandingPage() {
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={process.env.PUBLIC_URL}>
         <div id="Background" className={classes.root}>
         <CssBaseline />
         <AppBar position="absolute" id="AppBar" className={clsx(classes.appBar, open && classes.appBarShift)}>
